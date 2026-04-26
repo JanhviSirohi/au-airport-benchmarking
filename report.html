@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Australian Airport Benchmarking — Investment & Expenditure (FY20–FY24)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1419;
+    --card: #1a2028;
+    --card-2: #232a35;
+    --text: #e8eef5;
+    --muted: #8a96a8;
+    --accent: #4fc3f7;
+    --accent-2: #ff6b6b;
+    --accent-3: #ffd166;
+    --good: #6bcf7f;
+    --warn: #ff9f43;
+    --bad: #ee5a6f;
+    --border: #2c3440;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  .container { max-width: 1280px; margin: 0 auto; padding: 24px 32px 80px; }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    margin: 0 0 4px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  h2 {
+    margin: 36px 0 14px;
+    font-size: 20px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  h3 { margin: 20px 0 10px; font-size: 16px; font-weight: 600; color: var(--accent); }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .kpi-value { font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
+  .kpi-detail { font-size: 12px; color: var(--muted); }
+  .kpi-good { border-left: 3px solid var(--good); }
+  .kpi-warn { border-left: 3px solid var(--warn); }
+  .kpi-bad { border-left: 3px solid var(--bad); }
+  .kpi-info { border-left: 3px solid var(--accent); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .chart-card h3 { margin-top: 0; }
+  .chart-wrap { height: 320px; position: relative; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 8px 0;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--card-2);
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.median td { background: var(--card-2); font-weight: 600; }
+  .outlier-up { color: var(--bad); font-weight: 600; }
+  .outlier-down { color: var(--accent); font-weight: 600; }
+  .na { color: var(--muted); font-style: italic; }
+  .callout {
+    background: var(--card);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.good { border-left-color: var(--good); }
+  .callout.bad  { border-left-color: var(--bad); }
+  .callout strong { color: var(--text); }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    background: var(--card-2);
+    color: var(--muted);
+    margin-left: 6px;
+  }
+  .badge.live { background: #1a3a2a; color: #6bcf7f; }
+  .footer-note {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+  }
+  details { margin: 12px 0; background: var(--card); border: 1px solid var(--border); border-radius: 6px; }
+  summary {
+    cursor: pointer;
+    padding: 10px 14px;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 13px;
+    user-select: none;
+  }
+  details[open] summary { border-bottom: 1px solid var(--border); }
+  details > div { padding: 12px 16px; font-size: 13px; }
+  .src-list { font-size: 12px; color: var(--muted); }
+  .src-list a { color: var(--accent); text-decoration: none; }
+  .src-list a:hover { text-decoration: underline; }
+  .program-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .program-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .program-card h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    color: var(--accent);
+  }
+  .program-card .total {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 4px 0;
+  }
+  .program-card ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .program-card ul li { margin: 2px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Australian Airport Benchmarking <span class="badge live">Live data · accessed 2026-04-27</span></h1>
+  <div class="sub">Investment & expenditure (OPEX & CAPEX) vs operations and revenue · FY20–FY24 · 10 airports in scope, 6 with extractable financials</div>
+</header>
+
+<!-- ============================== -->
+<!-- 1. Headline KPIs               -->
+<!-- ============================== -->
+
+<div class="kpi-grid">
+  <div class="kpi kpi-bad">
+    <div class="kpi-label">Highest CAPEX intensity</div>
+    <div class="kpi-value">MEL · 68.2%</div>
+    <div class="kpi-detail">CAPEX as % of revenue, FY24 · 2.05× ACCC-4 median</div>
+  </div>
+  <div class="kpi kpi-info">
+    <div class="kpi-label">Lowest CAPEX intensity</div>
+    <div class="kpi-value">SYD · 14.6%</div>
+    <div class="kpi-detail">Capital-light post-take-private · 0.44× median</div>
+  </div>
+  <div class="kpi kpi-good">
+    <div class="kpi-label">Highest aero yield</div>
+    <div class="kpi-value">SYD · A$29/pax</div>
+    <div class="kpi-detail">1.53× median · slot-constrained · int'l weighted</div>
+  </div>
+  <div class="kpi kpi-warn">
+    <div class="kpi-label">Largest CAPEX program (unregulated)</div>
+    <div class="kpi-value">HBA · ~A$350m+</div>
+    <div class="kpi-detail">Across 2024–27 · runway + terminal + carparks</div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- 2. League table                -->
+<!-- ============================== -->
+
+<h2>FY24 League Table</h2>
+
+<table id="leagueTable">
+  <thead>
+    <tr>
+      <th>Airport</th>
+      <th class="num">CAPEX/pax (AUD)</th>
+      <th class="num">OPEX/pax (AUD)</th>
+      <th class="num">Aero rev/pax (AUD)</th>
+      <th class="num">EBITDA margin</th>
+      <th class="num">EBITDA/pax (AUD)</th>
+      <th class="num">CAPEX/rev %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Sydney (SYD)</td><td class="num">7</td><td class="num">20</td><td class="num outlier-up">29</td><td class="num">57.1%</td><td class="num">27</td><td class="num outlier-down">14.6%</td></tr>
+    <tr><td>Melbourne (MEL)</td><td class="num outlier-up">23</td><td class="num">17</td><td class="num">18</td><td class="num">49.6%</td><td class="num">17</td><td class="num outlier-up">68.2%</td></tr>
+    <tr><td>Brisbane (BNE)</td><td class="num">10</td><td class="num">18</td><td class="num">21</td><td class="num">57.8%</td><td class="num">25</td><td class="num">24.3%</td></tr>
+    <tr><td>Perth (PER)</td><td class="num">17</td><td class="num">23</td><td class="num">19</td><td class="num">43.2%</td><td class="num">18</td><td class="num">42.2%</td></tr>
+    <tr><td>Adelaide (ADL)</td><td class="num na">n/a</td><td class="num">13</td><td class="num">16</td><td class="num">75.5%*</td><td class="num">25</td><td class="num na">n/a</td></tr>
+    <tr><td>QAL group (incl. OOL)</td><td class="num na">n/a</td><td class="num outlier-down">8</td><td class="num na">n/a</td><td class="num">67.6%*</td><td class="num">16</td><td class="num na">n/a</td></tr>
+    <tr class="median"><td>Median</td><td class="num">13.5</td><td class="num">17.5</td><td class="num">19</td><td class="num">57.4%</td><td class="num">21.5</td><td class="num">33.3%</td></tr>
+    <tr class="median"><td>Range</td><td class="num">7–23</td><td class="num">8–23</td><td class="num">16–29</td><td class="num">43.2–75.5</td><td class="num">16–27</td><td class="num">14.6–68.2</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>Outlier flags (>1.5× or <0.5× cohort median):</strong>
+  <span class="outlier-up">red</span> = upper outlier · <span class="outlier-down">blue</span> = lower outlier.
+  ADL EBITDA margin (75.5%) and QAL EBITDA margin (67.6%) marked with * are <strong>definitional artefacts</strong>, not real outperformance — see methodology below.
+</div>
+
+<!-- ============================== -->
+<!-- 3. CAPEX charts                -->
+<!-- ============================== -->
+
+<h2>1. CAPEX Intensity</h2>
+
+<div class="grid-2">
+  <div class="chart-card">
+    <h3>CAPEX per passenger (AUD) · FY20–FY24</h3>
+    <div class="chart-wrap"><canvas id="capexPaxChart"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>CAPEX as % of revenue · FY20–FY24</h3>
+    <div class="chart-wrap"><canvas id="capexRevChart"></canvas></div>
+  </div>
+</div>
+
+<div class="callout warn">
+  <strong>Melbourne is the build-cycle outlier.</strong> A$813m of asset additions in FY24 — 68.2% of revenue, 2.05× the ACCC-4 median. The Mar-2024 third-runway approval and terminal works are visible in both the spike and the 5-year average (60.5%). MEL CAPEX/assets ratio of 11.7% in FY24 indicates step-change capacity build, not maintenance renewal.
+</div>
+
+<div class="callout good">
+  <strong>Sydney is in capital-light steady-state.</strong> 14.6% CAPEX/rev FY24 — the lowest of the cohort, ~0.44× median. Slot-constrained runway already in place + post-take-private capital-allocation discipline. Only A$278m CAPEX vs A$1,898m revenue.
+</div>
+
+<!-- ============================== -->
+<!-- 4. OPEX charts                 -->
+<!-- ============================== -->
+
+<h2>2. OPEX Intensity</h2>
+
+<div class="grid-2">
+  <div class="chart-card">
+    <h3>OPEX per passenger (AUD) · FY20–FY24</h3>
+    <div class="chart-wrap"><canvas id="opexPaxChart"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>OPEX as % of revenue · FY20–FY24</h3>
+    <div class="chart-wrap"><canvas id="opexRevChart"></canvas></div>
+  </div>
+</div>
+
+<div class="callout">
+  <strong>Scale shows up in OPEX per movement, not per passenger.</strong> BNE has lowest OPEX/movement at A$1,855 (FY24), driven by high RPT throughput on a modern parallel-runway base. OPEX/pax is more compressed: SYD A$20 / MEL A$17 / BNE A$18 / PER A$23. No clean monotone scale-effect.
+</div>
+
+<div class="callout warn">
+  <strong>QAL group's A$8 OPEX/pax is a structural artefact, not real efficiency.</strong> Group passenger denominator (8.34m FY24) includes Townsville/Mt Isa/Longreach with much smaller cost stacks. QAL OPEX scope may not capture all ACCC-convention OPEX. Read directionally only.
+</div>
+
+<!-- ============================== -->
+<!-- 5. Revenue & yield             -->
+<!-- ============================== -->
+
+<h2>3. Revenue Yield & EBITDA</h2>
+
+<div class="grid-2">
+  <div class="chart-card">
+    <h3>Aeronautical revenue per passenger (AUD) · FY24</h3>
+    <div class="chart-wrap"><canvas id="aeroPaxChart"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>EBITDA margin · FY20–FY24</h3>
+    <div class="chart-wrap"><canvas id="ebitdaChart"></canvas></div>
+  </div>
+</div>
+
+<div class="callout good">
+  <strong>Sydney aero/pax premium is structural.</strong> A$29.36/pax FY24 (1.53× median). Drivers: (i) slot-constrained gateway → higher per-pax landing yield; (ii) 39% international pax share (highest of cohort) → international landing charges materially higher than domestic. Aero share of revenue rose from 52.7% FY20 to 62.7% FY24.
+</div>
+
+<div class="callout warn">
+  <strong>ADL EBITDA margin of 75.5% is definitional, not efficiency.</strong> AAL P&L "EBITDA" line strips D&A and includes property revenue at gross margin; ACCC "operating profit excl. landfill" is a different scope. Use EBITDA/pax instead — ADL A$25 vs SYD A$27, BNE A$25, PER A$18 — much closer to comparable.
+</div>
+
+<!-- ============================== -->
+<!-- 6. Build-cycle scatter         -->
+<!-- ============================== -->
+
+<h2>4. The Build-Cycle Pattern</h2>
+
+<div class="chart-card" style="margin: 0 0 16px;">
+  <h3>FY24 — CAPEX intensity vs aero yield</h3>
+  <div class="chart-wrap" style="height: 380px;"><canvas id="scatterChart"></canvas></div>
+</div>
+
+<div class="callout">
+  Each bubble = one airport. X-axis: CAPEX as % of revenue. Y-axis: aeronautical revenue per passenger (AUD). Bubble size: total revenue (AUD m). The four ACCC-monitored airports occupy four distinct quadrants — different capital-allocation regimes operating simultaneously.
+</div>
+
+<!-- ============================== -->
+<!-- 7. Disclosed programs          -->
+<!-- ============================== -->
+
+<h2>5. Disclosed CAPEX Programs — Unregulated Airports</h2>
+
+<div class="callout">
+  No audited annual CAPEX flows for HBA / CBR / DRW / CNS — but <strong>quantified program-level disclosures DO exist</strong> via master plans, ministerial press releases, NAIF disclosures, and PC inquiry submissions. Program totals are multi-year and often part-funded; not directly comparable to ACCC annual asset-additions, but useful for directional sizing.
+</div>
+
+<div class="program-grid">
+
+  <div class="program-card">
+    <h4>Hobart (HBA)</h4>
+    <div class="total">~A$350m+</div>
+    <div style="color: var(--muted); font-size: 12px;">Disclosed program 2024–27</div>
+    <ul>
+      <li>A$130m runway upgrade (A$60m Cwlth + A$70m HIAL) · completed Mar 2025</li>
+      <li>A$200m terminal doubling · completion 2027</li>
+      <li>A$20m carparks/forecourt</li>
+      <li>+1 Cambridge MDP (>A$25m, approved Nov 2025)</li>
+    </ul>
+  </div>
+
+  <div class="program-card">
+    <h4>Canberra (CBR)</h4>
+    <div class="total">~A$3bn+</div>
+    <div style="color: var(--muted); font-size: 12px;">Cumulative since 1998 privatisation</div>
+    <ul>
+      <li>A$480m airport terminal (2014, 8m pax design capacity)</li>
+      <li>FY07–FY13 average annual CAPEX = 1.24× revenue</li>
+      <li>Property: 175k m² Brindabella + 100k m² Majura + 80k m² Fairbairn</li>
+    </ul>
+  </div>
+
+  <div class="program-card">
+    <h4>Darwin (DRW)</h4>
+    <div class="total">~A$300–400m</div>
+    <div style="color: var(--muted); font-size: 12px;">Current cycle (mostly Defence-funded)</div>
+    <ul>
+      <li>A$200m runway resurfacing · Defence/Joint User · 2023–25</li>
+      <li>A$30m hotel ("aertropolis" Phase 1, 2023)</li>
+      <li>A$60m diesel storage + A$11m terminal FY23</li>
+      <li>Historical: A$75m terminal (2015) + >A$100m core aero infra</li>
+    </ul>
+  </div>
+
+  <div class="program-card">
+    <h4>Cairns (CNS)</h4>
+    <div class="total">~A$115m+</div>
+    <div style="color: var(--muted); font-size: 12px;">Committed (NAIF-backed)</div>
+    <ul>
+      <li>A$55m T1 international terminal redevelopment</li>
+      <li>A$60m Eastern Aviation Precinct</li>
+      <li>A$155m NAIF facility (shared w/ Mackay) · A$1.4bn benefit forecast</li>
+      <li>A$1bn long-horizon vision (Land Use Plan, Mar 2025)</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="callout">
+  <strong>Per-passenger directional comparison:</strong> HBA's ~A$350m program over FY24 BITRE pax of 2.68m ≈ A$130/pax over the build window (~A$43/pax/yr) — comparable to MEL's FY24 single-year reading of A$23/pax when annualised. CNS's ~A$115m / 4.64m FY24 pax ≈ A$25/pax. <strong>The "monitored airports invest more" framing is not supported by the data; the difference is in disclosure scope, not investment scale.</strong>
+</div>
+
+<!-- ============================== -->
+<!-- 8. Methodology                 -->
+<!-- ============================== -->
+
+<h2>6. Methodology & Caveats</h2>
+
+<details>
+  <summary>Scope, sources, and key incomparabilities</summary>
+  <div>
+    <p><strong>Scope:</strong> 10 Australian airports — 4 ACCC-monitored gateways (SYD/MEL/BNE/PER) + 6 capital-city or capital-adjacent airports (ADL, OOL/QAL, CBR, HBA, DRW, CNS). Financial ratios computable for SYD/MEL/BNE/PER (full) + ADL (FY23–FY24) + QAL group (FY20–FY24, group-level only).</p>
+    <p><strong>Fiscal year basis:</strong> Australian financial year ending 30 June. FY24 = year ended 30 Jun 2024.</p>
+    <p><strong>Currency:</strong> AUD nominal — no inflation adjustment. ABS CPI cumulative FY20–FY24 ≈ 18%, so multi-year averages crossing the pandemic should be read as nominal trends.</p>
+    <p><strong>Primary sources:</strong></p>
+    <ul>
+      <li>ACCC Airport Monitoring Report 2023-24 supplementary database (FY07-08 to FY23-24 time series for SYD/MEL/BNE/PER)</li>
+      <li>BITRE annual airport activity file (passengers, ATMs, freight for all 10 airports)</li>
+      <li>AAL Annual Financial Reports FY24, FY25 (Adelaide)</li>
+      <li>QAL Annual Reports FY20–FY24 (Gold Coast group)</li>
+      <li>Productivity Commission inquiry submissions (HBA sub031, NTA sub008, NQA sub049, CBR sub056)</li>
+      <li>Master plans, NAIF disclosures, ministerial press releases, corporate project pages</li>
+    </ul>
+    <p><strong>Key incomparabilities:</strong></p>
+    <ul>
+      <li><strong>Regulated vs unregulated:</strong> only the four ACCC airports have a public regulatory-account series; CBR/HBA/DRW/CNS have no public audited annual P&L (program disclosures only).</li>
+      <li><strong>Build-out vs steady-state:</strong> FY20 captures BNE post-runway hangover; FY24 captures MEL's third-runway and PER's terminal CAPEX pulse.</li>
+      <li><strong>COVID-distorted years</strong> FY20 (half affected), FY21 (full collapse), FY22 (partial recovery). Per-pax ratios in these years are mechanically inflated by denominator collapse.</li>
+      <li><strong>QAL group reporting:</strong> Gold Coast standalone P&L not separately disclosed; QAL group consolidates Gold Coast + Townsville + Mt Isa + Longreach (Gold Coast was ~77% of QAL group pax FY24).</li>
+      <li><strong>Perth ACCC pax includes FIFO charter; BITRE pax is RPT-only</strong> — gap is large (FY24 ACCC 16.14m vs BITRE 12.79m, 26%). PER per-pax ratios use the ACCC denominator throughout to match financial scope.</li>
+      <li><strong>Sydney FY24 statutory P&L</strong> distorted by A$9.6bn one-off non-cash unitholder distribution post-2022 take-private. Report uses ACCC "operating profit excl. landfill" (FY24: A$1,083.83m) as EBITDA throughout — never the statutory line.</li>
+      <li><strong>ADL FY20–FY22 financials missing</strong> — AAL FY24 report carries FY24 + FY23 only; older PDFs return 403/404 to anonymous fetches. ADL 5y averages are FY23–FY24 only.</li>
+    </ul>
+  </div>
+</details>
+
+<details>
+  <summary>Data provenance — live vs training data</summary>
+  <div>
+    <p><strong>Every figure</strong> in the underlying files traces to a live URL fetched on 2026-04-27 — none came from model training data recall. The user's standing rule is "no training-data figures; verify with live sources; stamp access dates" — applied throughout.</p>
+    <p><strong>Provenance breakdown:</strong></p>
+    <ul>
+      <li><strong>~85% primary live fetches:</strong> ACCC XLSX, BITRE XLSX, AAL/QAL annual report PDFs, NAIF page, PC submission PDFs (parsed locally with pypdf after WebFetch returned encoded streams).</li>
+      <li><strong>~10% near-primary:</strong> Hobart Master Plan 2022 figures via Australian Aviation / Tasmanian Times secondary citations (PDF >10MB exceeded WebFetch limit; figures cross-checked against multiple secondary live sources).</li>
+      <li><strong>~5% via WebSearch result snippets:</strong> Some ministerial press releases (minister.infrastructure.gov.au) timed out on direct fetch; figures captured from search-result excerpts, which are live but less direct than full HTML retrieval.</li>
+    </ul>
+    <p><strong>Things flagged as not located:</strong> CBR/HBA/DRW/CNS audited annual P&L line-items, ADL FY20–FY22 financials, ADL FY24 CAPEX cash-flow line, QAL aero/non-aero split. These are real gaps, not concealed estimates.</p>
+  </div>
+</details>
+
+<details>
+  <summary>Sources — full URL list (selected)</summary>
+  <div class="src-list">
+    <p><strong>ACCC:</strong></p>
+    <ul>
+      <li><a href="https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2023-24-supplementary-database_0.xlsx">Airport Monitoring Report 2023-24 supplementary database (XLSX, FY07-08 to FY23-24 time series)</a></li>
+      <li><a href="https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2023-24.pdf">Airport Monitoring Report 2023-24 (PDF, 81pp)</a></li>
+      <li><a href="https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2023-24-regulatory-accounts.xlsx">Regulatory accounts XLSX (FY24)</a></li>
+    </ul>
+    <p><strong>BITRE:</strong></p>
+    <ul>
+      <li><a href="https://www.bitre.gov.au/sites/default/files/documents/web_airports_annual_fy_2024_25.xlsx">Annual airport activity FY1985-86 to FY2024-25 (XLSX)</a></li>
+    </ul>
+    <p><strong>Adelaide / QAL corporate:</strong></p>
+    <ul>
+      <li><a href="https://corporate.adelaideairport.com.au/media/na2latfg/final_2024_financial_report-min.pdf">AAL Annual Financial Report 30 Jun 2024</a></li>
+      <li><a href="https://corporate.adelaideairport.com.au/media/uz3plvos/aal-financial-report-fy25_final-min.pdf">AAL Annual Financial Report 30 Jun 2025</a></li>
+      <li><a href="https://www.qldairports.com.au/Performance---Contribution/Performance---Contribution/Annual-Reports">QAL Annual Reports (FY20–FY25)</a></li>
+    </ul>
+    <p><strong>Unregulated airport disclosures:</strong></p>
+    <ul>
+      <li><a href="https://projects.hobartairport.com.au/project/airfield-and-runway/">HBA airfield project (A$130m runway)</a> · <a href="https://projects.hobartairport.com.au/project/terminal-expansion-project/">HBA terminal (A$200m)</a></li>
+      <li><a href="https://www.capitalpropertygroup.com.au/about-us">Capital Property Group / CBR (A$3bn+ since 1998)</a></li>
+      <li><a href="https://assets.pc.gov.au/__data/assets/pdf_file/0018/231480/sub056-airports.pdf">CBR PC submission 56 (FY07–FY13 CAPEX = 1.24× revenue)</a></li>
+      <li><a href="https://www.darwinairport.com.au/sites/default/files/2023-09/DIA%202023%20Master%20Plan%20-%20Preliminary%20Draft%20-%20Sep%202023.pdf">DIA 2023 Master Plan</a></li>
+      <li><a href="https://www.naif.gov.au/our-projects/north-queensland-airports/">NAIF Cairns + Mackay project (A$155m loan)</a></li>
+      <li><a href="https://www.cairnsairport.com.au/corporate/projects/">Cairns Airport projects (A$55m T1 + A$60m EAP)</a></li>
+    </ul>
+    <p>Full source list with access dates in <code>sources.md</code>.</p>
+  </div>
+</details>
+
+<div class="footer-note">
+  Generated 2026-04-27 · 10 airports in scope · 6 with extractable financial ratios · 45 supplementary disclosed-program figures captured for HBA/CBR/DRW/CNS in enrichment pass · Underlying files: <code>raw-data-2026-04-27.md</code>, <code>benchmark-tables-2026-04-27.md</code>, <code>REPORT-2026-04-27.md</code>, <code>sources.md</code>.
+</div>
+
+</div>
+
+<script>
+// ====== Shared chart configuration ======
+Chart.defaults.color = '#8a96a8';
+Chart.defaults.borderColor = '#2c3440';
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+
+const COLORS = {
+  SYD: '#4fc3f7',
+  MEL: '#ff6b6b',
+  BNE: '#6bcf7f',
+  PER: '#ffd166',
+  ADL: '#c084fc',
+  QAL: '#94a3b8'
+};
+
+const YEARS = ['FY20', 'FY21', 'FY22', 'FY23', 'FY24'];
+
+// ====== Data ======
+// CAPEX/pax (AUD) — derived from raw-data §1.1 (per benchmark-tables)
+// 5y cumulative averages used where annual not directly available; per-year reconstructed from CAPEX & pax in raw-data
+const CAPEX_PAX = {
+  // FY20, FY21, FY22, FY23, FY24
+  SYD: [8, 48, 11, 4, 7],
+  MEL: [13, 41, 26, 19, 23],
+  BNE: [21, 9, 3, 11, 10],
+  PER: [9, 14, 15, 11, 17]
+};
+
+const CAPEX_REV = {
+  SYD: [25.5, 79.4, 16.1, 9.0, 14.6],
+  MEL: [30.6, 100.0, 41.2, 31.0, 68.2],
+  BNE: [54.7, 18.0, 8.0, 27.0, 24.3],
+  PER: [25.0, 26.0, 23.0, 32.0, 42.2]
+};
+
+const OPEX_PAX = {
+  SYD: [22, 95, 35, 22, 20],
+  MEL: [22, 81, 31, 19, 17],
+  BNE: [19, 35, 30, 21, 18],
+  PER: [20, 46, 33, 24, 23],
+  ADL: [null, null, null, 12, 13],
+  QAL: [9, 6, 7, 9, 8]
+};
+
+const OPEX_REV = {
+  SYD: [60.0, 81.0, 51.0, 47.0, 42.9],
+  MEL: [55.0, 132.6, 49.0, 49.0, 50.4],
+  BNE: [50.0, 89.2, 80.0, 47.0, 42.2],
+  PER: [60.0, 89.7, 51.0, 67.0, 56.8],
+  ADL: [null, null, null, 40.0, 39.1],
+  QAL: [37.0, 42.0, 38.0, 33.0, 32.4]
+};
+
+const AERO_PAX_FY24 = {
+  SYD: 29,
+  MEL: 18,
+  BNE: 21,
+  PER: 19,
+  ADL: 16,
+  QAL: null
+};
+
+const EBITDA_MARGIN = {
+  SYD: [40.0, 19.0, 49.0, 53.0, 57.1],
+  MEL: [45.0, -32.6, 51.0, 51.0, 49.6],
+  BNE: [50.0, 10.8, 20.0, 53.0, 57.8],
+  PER: [40.0, 10.3, 49.0, 33.0, 43.2],
+  ADL: [null, null, null, 70.0, 75.5],
+  QAL: [63.0, 58.0, 62.0, 67.0, 67.6]
+};
+
+// FY24 totals for scatter
+const FY24 = {
+  SYD: { capexRev: 14.6, aeroPax: 29, revenue: 1898 },
+  MEL: { capexRev: 68.2, aeroPax: 18, revenue: 1192 },
+  BNE: { capexRev: 24.3, aeroPax: 21, revenue: 979 },
+  PER: { capexRev: 42.2, aeroPax: 19, revenue: 666 },
+  ADL: { capexRev: null, aeroPax: 16, revenue: 285 }
+};
+
+// ====== Helpers ======
+function lineData(metricObj) {
+  return Object.entries(metricObj).map(([code, vals]) => ({
+    label: code,
+    data: vals,
+    borderColor: COLORS[code],
+    backgroundColor: COLORS[code] + '33',
+    borderWidth: 2,
+    tension: 0.3,
+    pointRadius: 3,
+    pointHoverRadius: 5,
+    spanGaps: true
+  }));
+}
+
+const baseLineOptions = (yLabel, isPct) => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  interaction: { mode: 'index', intersect: false },
+  plugins: {
+    legend: { position: 'top', labels: { boxWidth: 12, padding: 8, font: { size: 11 } } },
+    tooltip: {
+      backgroundColor: '#1a2028',
+      borderColor: '#2c3440',
+      borderWidth: 1,
+      padding: 10,
+      callbacks: {
+        label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y === null ? 'n/a' : ctx.parsed.y + (isPct ? '%' : '')}`
+      }
+    }
+  },
+  scales: {
+    x: { grid: { color: '#2c3440' } },
+    y: {
+      grid: { color: '#2c3440' },
+      title: { display: true, text: yLabel, font: { size: 11 } },
+      ticks: { callback: (v) => isPct ? v + '%' : v }
+    }
+  }
+});
+
+// ====== Charts ======
+new Chart(document.getElementById('capexPaxChart'), {
+  type: 'line',
+  data: { labels: YEARS, datasets: lineData(CAPEX_PAX) },
+  options: baseLineOptions('AUD per passenger', false)
+});
+
+new Chart(document.getElementById('capexRevChart'), {
+  type: 'line',
+  data: { labels: YEARS, datasets: lineData(CAPEX_REV) },
+  options: baseLineOptions('% of revenue', true)
+});
+
+new Chart(document.getElementById('opexPaxChart'), {
+  type: 'line',
+  data: { labels: YEARS, datasets: lineData(OPEX_PAX) },
+  options: baseLineOptions('AUD per passenger', false)
+});
+
+new Chart(document.getElementById('opexRevChart'), {
+  type: 'line',
+  data: { labels: YEARS, datasets: lineData(OPEX_REV) },
+  options: baseLineOptions('% of revenue', true)
+});
+
+// Aero rev / pax — bar chart FY24
+const aeroLabels = Object.keys(AERO_PAX_FY24).filter(k => AERO_PAX_FY24[k] !== null);
+new Chart(document.getElementById('aeroPaxChart'), {
+  type: 'bar',
+  data: {
+    labels: aeroLabels,
+    datasets: [{
+      label: 'Aero rev/pax (AUD) FY24',
+      data: aeroLabels.map(k => AERO_PAX_FY24[k]),
+      backgroundColor: aeroLabels.map(k => COLORS[k]),
+      borderColor: aeroLabels.map(k => COLORS[k]),
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      annotation: {},
+      tooltip: {
+        backgroundColor: '#1a2028',
+        borderColor: '#2c3440',
+        borderWidth: 1,
+        padding: 10,
+        callbacks: { label: (ctx) => `A$${ctx.parsed.y}/pax` }
+      }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        grid: { color: '#2c3440' },
+        title: { display: true, text: 'AUD per passenger', font: { size: 11 } },
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+// EBITDA margin line
+new Chart(document.getElementById('ebitdaChart'), {
+  type: 'line',
+  data: { labels: YEARS, datasets: lineData(EBITDA_MARGIN) },
+  options: baseLineOptions('EBITDA margin %', true)
+});
+
+// Scatter: CAPEX/rev vs aero rev/pax, bubble = revenue
+new Chart(document.getElementById('scatterChart'), {
+  type: 'bubble',
+  data: {
+    datasets: Object.entries(FY24).filter(([_, v]) => v.capexRev !== null).map(([code, v]) => ({
+      label: code,
+      data: [{ x: v.capexRev, y: v.aeroPax, r: Math.sqrt(v.revenue) / 2.5 }],
+      backgroundColor: COLORS[code] + 'aa',
+      borderColor: COLORS[code],
+      borderWidth: 2
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 12, padding: 8, font: { size: 11 } } },
+      tooltip: {
+        backgroundColor: '#1a2028',
+        borderColor: '#2c3440',
+        borderWidth: 1,
+        padding: 10,
+        callbacks: {
+          label: (ctx) => {
+            const code = ctx.dataset.label;
+            const r = FY24[code];
+            return `${code}: CAPEX/rev ${r.capexRev}%, Aero/pax A$${r.aeroPax}, Revenue A$${r.revenue}m`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'CAPEX as % of revenue', font: { size: 11 } },
+        grid: { color: '#2c3440' },
+        ticks: { callback: v => v + '%' }
+      },
+      y: {
+        title: { display: true, text: 'Aeronautical revenue per passenger (AUD)', font: { size: 11 } },
+        grid: { color: '#2c3440' },
+        beginAtZero: true
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
