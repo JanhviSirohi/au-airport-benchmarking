@@ -214,6 +214,11 @@
     <div class="kpi-value">HBA · ~A$350m+</div>
     <div class="kpi-detail">Across 2024–27 · runway + terminal + carparks</div>
   </div>
+  <div class="kpi kpi-bad">
+    <div class="kpi-label">Newest build-cycle entrant</div>
+    <div class="kpi-value">ADL · 5.4× ramp</div>
+    <div class="kpi-detail">CAPEX A$39m FY23 → A$209m FY25 · A$1bn program</div>
+  </div>
 </div>
 
 <!-- ============================== -->
@@ -239,17 +244,22 @@
     <tr><td>Melbourne (MEL)</td><td class="num outlier-up">23</td><td class="num">17</td><td class="num">18</td><td class="num">49.6%</td><td class="num">17</td><td class="num outlier-up">68.2%</td></tr>
     <tr><td>Brisbane (BNE)</td><td class="num">10</td><td class="num">18</td><td class="num">21</td><td class="num">57.8%</td><td class="num">25</td><td class="num">24.3%</td></tr>
     <tr><td>Perth (PER)</td><td class="num">17</td><td class="num">23</td><td class="num">19</td><td class="num">43.2%</td><td class="num">18</td><td class="num">42.2%</td></tr>
-    <tr><td>Adelaide (ADL)</td><td class="num na">n/a</td><td class="num">13</td><td class="num">16</td><td class="num">75.5%*</td><td class="num">25</td><td class="num na">n/a</td></tr>
-    <tr><td>QAL group (incl. OOL)</td><td class="num na">n/a</td><td class="num outlier-down">8</td><td class="num na">n/a</td><td class="num">67.6%*</td><td class="num">16</td><td class="num na">n/a</td></tr>
-    <tr class="median"><td>Median</td><td class="num">13.5</td><td class="num">17.5</td><td class="num">19</td><td class="num">57.4%</td><td class="num">21.5</td><td class="num">33.3%</td></tr>
-    <tr class="median"><td>Range</td><td class="num">7–23</td><td class="num">8–23</td><td class="num">16–29</td><td class="num">43.2–75.5</td><td class="num">16–27</td><td class="num">14.6–68.2</td></tr>
+    <tr><td>Adelaide (ADL) FY24</td><td class="num">13</td><td class="num">13</td><td class="num">17</td><td class="num">60.9%*</td><td class="num">21</td><td class="num">37.5%</td></tr>
+    <tr><td>Adelaide (ADL) FY25</td><td class="num outlier-up">24</td><td class="num">15</td><td class="num">19</td><td class="num">60.6%*</td><td class="num">22</td><td class="num outlier-up">65.6%</td></tr>
+    <tr><td>QAL group (incl. OOL)</td><td class="num na">n/a</td><td class="num outlier-down">8</td><td class="num na">n/a</td><td class="num">67.6%†</td><td class="num">16</td><td class="num na">n/a</td></tr>
+    <tr class="median"><td>Median (ACCC-4 + ADL FY24)</td><td class="num">11.5</td><td class="num">17</td><td class="num">19</td><td class="num">57.1%</td><td class="num">25</td><td class="num">24.3%</td></tr>
+    <tr class="median"><td>Range</td><td class="num">7–24</td><td class="num">8–23</td><td class="num">16–29</td><td class="num">43.2–60.9</td><td class="num">16–27</td><td class="num">14.6–68.2</td></tr>
   </tbody>
 </table>
 
 <div class="callout">
   <strong>Outlier flags (>1.5× or <0.5× cohort median):</strong>
   <span class="outlier-up">red</span> = upper outlier · <span class="outlier-down">blue</span> = lower outlier.
-  ADL EBITDA margin (75.5%) and QAL EBITDA margin (67.6%) marked with * are <strong>definitional artefacts</strong>, not real outperformance — see methodology below.
+  ADL EBITDA margin marked * uses <strong>underlying EBITDA</strong> (excl A$41.6m FV gain on investment properties FY24, A$67.6m FY25) for cohort comparability — statutory ADL EBITDA margin is 75.5% (FY24) / 81.8% (FY25). QAL EBITDA margin marked † is group-level (4-airport consolidation), not standalone Gold Coast.
+</div>
+
+<div class="callout bad">
+  <strong>ADL FY25 = the new build-cycle entrant.</strong> Adelaide CAPEX surged from A$39m (FY23) to A$107m (FY24) to A$209m (FY25) — a 5.4× three-year ramp. FY25 CAPEX/revenue of 65.6% approaches MEL's FY24 peak of 68.2%. Source: AAL FY22 Integrated Review p.8 disclosed A$1bn 10-year program; FY23–FY25 audited cash flow statements show execution. Data unlocked 2026-04-27 from user-supplied PDFs.
 </div>
 
 <!-- ============================== -->
@@ -508,42 +518,42 @@ const COLORS = {
   QAL: '#94a3b8'
 };
 
-const YEARS = ['FY20', 'FY21', 'FY22', 'FY23', 'FY24'];
+const YEARS = ['FY20', 'FY21', 'FY22', 'FY23', 'FY24', 'FY25'];
 
 // ====== Data ======
-// CAPEX/pax (AUD) — derived from raw-data §1.1 (per benchmark-tables)
-// 5y cumulative averages used where annual not directly available; per-year reconstructed from CAPEX & pax in raw-data
+// FY20-FY24 ACCC-4 from ACCC supplementary database; ADL FY22-FY25 audited; QAL FY20-FY24 group-level
 const CAPEX_PAX = {
-  // FY20, FY21, FY22, FY23, FY24
-  SYD: [8, 48, 11, 4, 7],
-  MEL: [13, 41, 26, 19, 23],
-  BNE: [21, 9, 3, 11, 10],
-  PER: [9, 14, 15, 11, 17]
+  SYD: [8, 48, 11, 4, 7, null],
+  MEL: [13, 41, 26, 19, 23, null],
+  BNE: [21, 9, 3, 11, 10, null],
+  PER: [9, 14, 15, 11, 17, null],
+  ADL: [null, null, 10, 5, 13, 24]
 };
 
 const CAPEX_REV = {
-  SYD: [25.5, 79.4, 16.1, 9.0, 14.6],
-  MEL: [30.6, 100.0, 41.2, 31.0, 68.2],
-  BNE: [54.7, 18.0, 8.0, 27.0, 24.3],
-  PER: [25.0, 26.0, 23.0, 32.0, 42.2]
+  SYD: [25.5, 79.4, 16.1, 9.0, 14.6, null],
+  MEL: [30.6, 100.0, 41.2, 31.0, 68.2, null],
+  BNE: [54.7, 18.0, 8.0, 27.0, 24.3, null],
+  PER: [25.0, 26.0, 23.0, 32.0, 42.2, null],
+  ADL: [null, null, 26.2, 15.8, 37.5, 65.6]
 };
 
 const OPEX_PAX = {
-  SYD: [22, 95, 35, 22, 20],
-  MEL: [22, 81, 31, 19, 17],
-  BNE: [19, 35, 30, 21, 18],
-  PER: [20, 46, 33, 24, 23],
-  ADL: [null, null, null, 12, 13],
-  QAL: [9, 6, 7, 9, 8]
+  SYD: [22, 95, 35, 22, 20, null],
+  MEL: [22, 81, 31, 19, 17, null],
+  BNE: [19, 35, 30, 21, 18, null],
+  PER: [20, 46, 33, 24, 23, null],
+  ADL: [null, null, 18, 13, 13, 15],
+  QAL: [9, 6, 7, 9, 8, null]
 };
 
 const OPEX_REV = {
-  SYD: [60.0, 81.0, 51.0, 47.0, 42.9],
-  MEL: [55.0, 132.6, 49.0, 49.0, 50.4],
-  BNE: [50.0, 89.2, 80.0, 47.0, 42.2],
-  PER: [60.0, 89.7, 51.0, 67.0, 56.8],
-  ADL: [null, null, null, 40.0, 39.1],
-  QAL: [37.0, 42.0, 38.0, 33.0, 32.4]
+  SYD: [60.0, 81.0, 51.0, 47.0, 42.9, null],
+  MEL: [55.0, 132.6, 49.0, 49.0, 50.4, null],
+  BNE: [50.0, 89.2, 80.0, 47.0, 42.2, null],
+  PER: [60.0, 89.7, 51.0, 67.0, 56.8, null],
+  ADL: [null, null, 47.0, 37.7, 39.1, 39.4],
+  QAL: [37.0, 42.0, 38.0, 33.0, 32.4, null]
 };
 
 const AERO_PAX_FY24 = {
@@ -551,17 +561,18 @@ const AERO_PAX_FY24 = {
   MEL: 18,
   BNE: 21,
   PER: 19,
-  ADL: 16,
+  ADL: 17,
   QAL: null
 };
 
+// EBITDA margin — ADL uses underlying (excl FV gain on investment properties) for comparability with ACCC operating-profit-excl-landfill scope
 const EBITDA_MARGIN = {
-  SYD: [40.0, 19.0, 49.0, 53.0, 57.1],
-  MEL: [45.0, -32.6, 51.0, 51.0, 49.6],
-  BNE: [50.0, 10.8, 20.0, 53.0, 57.8],
-  PER: [40.0, 10.3, 49.0, 33.0, 43.2],
-  ADL: [null, null, null, 70.0, 75.5],
-  QAL: [63.0, 58.0, 62.0, 67.0, 67.6]
+  SYD: [40.0, 19.0, 49.0, 53.0, 57.1, null],
+  MEL: [45.0, -32.6, 51.0, 51.0, 49.6, null],
+  BNE: [50.0, 10.8, 20.0, 53.0, 57.8, null],
+  PER: [40.0, 10.3, 49.0, 33.0, 43.2, null],
+  ADL: [null, null, 53.1, 62.4, 60.9, 60.6],
+  QAL: [63.0, 58.0, 62.0, 67.0, 67.6, null]
 };
 
 // FY24 totals for scatter
@@ -570,7 +581,7 @@ const FY24 = {
   MEL: { capexRev: 68.2, aeroPax: 18, revenue: 1192 },
   BNE: { capexRev: 24.3, aeroPax: 21, revenue: 979 },
   PER: { capexRev: 42.2, aeroPax: 19, revenue: 666 },
-  ADL: { capexRev: null, aeroPax: 16, revenue: 285 }
+  ADL: { capexRev: 37.5, aeroPax: 17, revenue: 285 }
 };
 
 // ====== Helpers ======
