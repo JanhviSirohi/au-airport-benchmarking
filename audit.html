@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accuracy Audit — Australian Airport Benchmarking</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --card: #1a2028;
+    --card-2: #232a35;
+    --text: #e8eef5;
+    --muted: #8a96a8;
+    --accent: #4fc3f7;
+    --accent-2: #ff6b6b;
+    --good: #6bcf7f;
+    --warn: #ff9f43;
+    --bad: #ee5a6f;
+    --border: #2c3440;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } nav.side { position: static !important; height: auto !important; } }
+
+  /* Sidebar */
+  nav.side {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    padding: 20px 18px;
+    overflow-y: auto;
+  }
+  nav.side h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 18px 0 6px;
+    border: none;
+    padding: 0;
+  }
+  nav.side h2:first-child { margin-top: 0; }
+  nav.side a {
+    display: block;
+    color: var(--text);
+    text-decoration: none;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 1px 0;
+  }
+  nav.side a:hover { background: var(--card-2); color: var(--accent); }
+  nav.side .filter-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  nav.side .filter-row button {
+    flex: 1;
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  nav.side .filter-row button.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  /* Main */
+  main {
+    padding: 24px 36px 80px;
+    max-width: 1100px;
+  }
+  header.topbar {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 18px;
+    margin-bottom: 24px;
+  }
+  h1 { margin: 0 0 4px; font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); font-size: 13px; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin: 18px 0 28px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .stat-value { font-size: 22px; font-weight: 600; margin: 2px 0; }
+  .stat-detail { font-size: 11px; color: var(--muted); }
+
+  h2.section {
+    margin: 36px 0 14px;
+    font-size: 19px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    color: var(--accent);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    scroll-margin-top: 10px;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    background: var(--card-2);
+    padding: 2px 7px;
+    border-radius: 3px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .card-id.risk-high { color: var(--bad); border-left: 2px solid var(--bad); }
+  .card-id.risk-medium { color: var(--warn); border-left: 2px solid var(--warn); }
+  .card-id.risk-low { color: var(--muted); border-left: 2px solid var(--muted); }
+  .card-title {
+    font-weight: 600;
+    font-size: 14px;
+    flex: 1;
+  }
+  .card-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .card-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 13px;
+    border-top: 1px dashed #2c344055;
+  }
+  .card-row:first-of-type { border-top: none; }
+  .card-row .label {
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding-top: 2px;
+  }
+  .card-row code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    background: var(--card-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* Inline ref chip */
+  a.ref {
+    display: inline-block;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    padding: 1px 5px;
+    background: var(--card-2);
+    color: var(--accent);
+    border-radius: 3px;
+    text-decoration: none;
+    margin: 0 2px;
+    font-weight: 500;
+  }
+  a.ref:hover { background: var(--accent); color: var(--bg); }
+  a.ref.risk { color: var(--warn); }
+  a.ref.risk:hover { background: var(--warn); }
+
+  /* Backlinks */
+  .backlinks {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #2c344055;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .backlinks .label {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+  }
+
+  /* Risk impact badges */
+  .impact {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-left: 8px;
+  }
+  .impact.high { background: #4a1c22; color: #ff8b9a; }
+  .impact.medium { background: #4a3818; color: #ffc777; }
+  .impact.low { background: #2a3340; color: var(--muted); }
+
+  .deriv-box {
+    background: var(--card-2);
+    border-left: 2px solid var(--accent);
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    margin: 4px 0;
+    line-height: 1.6;
+  }
+
+  .top-link {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 10px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  .legend-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    font-size: 12px;
+  }
+  .legend-box dt { font-weight: 600; color: var(--accent); display: inline-block; min-width: 28px; }
+  .legend-box dd { display: inline; margin: 0 0 0 4px; color: var(--text); }
+  .legend-box dl { margin: 4px 0; }
+  .legend-box dl div { margin: 2px 0; }
+
+  .hidden { display: none !important; }
+  details summary { cursor: pointer; user-select: none; padding: 6px 0; font-weight: 600; color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ============================== -->
+<!-- Sidebar                        -->
+<!-- ============================== -->
+<nav class="side">
+  <h2>Filter</h2>
+  <div class="filter-row">
+    <button class="active" data-filter="all">All</button>
+    <button data-filter="claim">Claims</button>
+    <button data-filter="source">Sources</button>
+    <button data-filter="risk">Risks</button>
+  </div>
+
+  <h2>Quick jump</h2>
+  <a href="#legend">Legend</a>
+  <a href="#claims">Headline claims</a>
+  <a href="#sources">Sources (S1–S17)</a>
+  <a href="#risks">Risks (F1–F16)</a>
+  <a href="#methodology">Methodology</a>
+
+  <h2>Top claims</h2>
+  <a href="#C001">C001 · MEL 68.2% CAPEX/rev</a>
+  <a href="#C002">C002 · SYD 14.6% CAPEX/rev</a>
+  <a href="#C003">C003 · ADL 5.4× CAPEX ramp</a>
+  <a href="#C004">C004 · SYD A$29 aero/pax</a>
+  <a href="#C005">C005 · HBA A$350m program</a>
+
+  <h2>High-impact risks</h2>
+  <a href="#F1">F1 · In-PDF extraction</a>
+  <a href="#F2">F2 · 10MB WebFetch limit</a>
+  <a href="#F3">F3 · Pax denominator</a>
+  <a href="#F4">F4 · EBITDA definition</a>
+
+  <h2>Files</h2>
+  <a href="report.html">← Visual report</a>
+  <a href="ACCURACY-AUDIT.md">ACCURACY-AUDIT.md</a>
+  <a href="REPORT-2026-04-27.md">REPORT.md</a>
+  <a href="raw-data-2026-04-27.md">raw-data.md</a>
+  <a href="https://github.com/JanhviSirohi/au-airport-benchmarking">GitHub repo</a>
+</nav>
+
+<!-- ============================== -->
+<!-- Main                           -->
+<!-- ============================== -->
+<main>
+
+<header class="topbar">
+  <h1>Accuracy Audit & Source Trace</h1>
+  <div class="sub">Australian Airport Benchmarking · FY20–FY25 · accessed 2026-04-27 · every conclusion mapped to a primary source and a derivation method</div>
+</header>
+
+<div class="stats-grid">
+  <div class="stat">
+    <div class="stat-label">Headline claims</div>
+    <div class="stat-value">22</div>
+    <div class="stat-detail">Each with source + derivation + caveats</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Primary sources</div>
+    <div class="stat-value">17</div>
+    <div class="stat-detail">S1–S17 · 11 audited primary, 4 corp/govt, 2 secondary</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Accuracy risks</div>
+    <div class="stat-value">16</div>
+    <div class="stat-detail">F1–F16 · 4 high · 7 medium · 5 low impact</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Strongest series</div>
+    <div class="stat-value">5</div>
+    <div class="stat-detail">ACCC-4 FY20–FY24 + ADL FY22–FY25 audited</div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- Legend                         -->
+<!-- ============================== -->
+<h2 class="section" id="legend">Legend</h2>
+<div class="legend-box">
+  <strong>Source codes</strong>
+  <dl>
+    <div><dt>S1</dt><dd>= ACCC supplementary database</dd></div>
+    <div><dt>S2</dt><dd>= BITRE annual airport activity</dd></div>
+    <div><dt>S3</dt><dd>= AAL FY24 audited</dd></div>
+    <div><dt>S4</dt><dd>= AAL FY25 audited</dd></div>
+    <div><dt>S5</dt><dd>= AAL FY23 audited</dd></div>
+    <div><dt>S6</dt><dd>= AAL FY22 Integrated Review</dd></div>
+    <div><dt>S7</dt><dd>= QAL group annual reports</dd></div>
+    <div><dt>S8–S17</dt><dd>= NAIF, project pages, PC submissions, etc.</dd></div>
+  </dl>
+  <div style="margin-top: 8px;"><strong>Derivation codes</strong></div>
+  <dl>
+    <div><dt>D1</dt><dd>= Direct read (no computation)</dd></div>
+    <div><dt>D2</dt><dd>= Ratio: numerator ÷ denominator</dd></div>
+    <div><dt>D3</dt><dd>= Sum of components</dd></div>
+    <div><dt>D4</dt><dd>= Year-on-year derivation</dd></div>
+    <div><dt>D5</dt><dd>= Cohort statistic (median, range)</dd></div>
+    <div><dt>D6</dt><dd>= Indicative / aspirational corporate disclosure (NOT audited)</dd></div>
+  </dl>
+  <div style="margin-top: 8px;"><strong>Risk impact</strong></div>
+  <dl>
+    <div><dt><span class="impact high">High</span></dt><dd>Materially affects headline conclusions</dd></div>
+    <div><dt><span class="impact medium">Med</span></dt><dd>Affects precision but not direction</dd></div>
+    <div><dt><span class="impact low">Low</span></dt><dd>Edge-case or already mitigated</dd></div>
+  </dl>
+</div>
+
+<!-- ============================== -->
+<!-- CLAIMS                         -->
+<!-- ============================== -->
+<h2 class="section" id="claims">Headline claims (C001–C022)</h2>
+
+<!-- C001 -->
+<div class="card claim" id="C001">
+  <div class="card-header">
+    <span class="card-id">C001</span>
+    <span class="card-title">Melbourne FY24 — highest CAPEX intensity in cohort</span>
+    <span class="card-value">68.2%</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>MEL CAPEX as % of total revenue, FY24 = 68.2% — 2.05× the ACCC-4 cohort median of 33.3%</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a> ACCC supplementary database FY07-08 to FY23-24, sheet "MEL total and aero"</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a> ratio</span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">CAPEX FY24 (A$812.88m) ÷ Revenue FY24 (A$1,192m) = 68.2%</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F5">F5</a> revenue scope (regulated vs total) · <a class="ref risk" href="#F6">F6</a> nominal · <a class="ref risk" href="#F8">F8</a> median moved when ADL added (n=4 → n=5 makes new median 24.3%, MEL is 2.81× new median)</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> KPI banner · league table · §3 CAPEX narrative · scatter chart</div>
+</div>
+
+<!-- C002 -->
+<div class="card claim" id="C002">
+  <div class="card-header">
+    <span class="card-id">C002</span>
+    <span class="card-title">Sydney FY24 — lowest CAPEX intensity (capital-light)</span>
+    <span class="card-value">14.6%</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>SYD CAPEX as % of revenue, FY24 = 14.6% — 0.44× ACCC-4 median</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a> ACCC supp DB, sheet "SYD total and aero"</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a> ratio</span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">CAPEX FY24 (A$277.83m) ÷ Revenue FY24 (A$1,898m) = 14.6%</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F14">F14</a> SYD FY24 statutory P&L distorted by A$9.6bn one-off non-cash unitholder distribution; CAPEX-to-revenue uses ACCC operating-scope, not statutory · <a class="ref risk" href="#F5">F5</a> revenue scope</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> KPI banner · league table · §3 CAPEX narrative · scatter</div>
+</div>
+
+<!-- C003 -->
+<div class="card claim" id="C003">
+  <div class="card-header">
+    <span class="card-id">C003</span>
+    <span class="card-title">Adelaide — 5.4× CAPEX ramp FY22 → FY25</span>
+    <span class="card-value">5.4×</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>ADL annual CAPEX rose from A$38.65m (FY22) to A$208.72m (FY25), a 5.4× nominal ramp executing a previously-disclosed indicative A$1bn 10-year program</span></div>
+  <div class="card-row"><span class="label">Sources</span><span><a class="ref" href="#S5">S5</a> AAL FY23 audited (FY22 comparatives) · <a class="ref" href="#S3">S3</a> AAL FY24 audited · <a class="ref" href="#S4">S4</a> AAL FY25 audited · <a class="ref" href="#S6">S6</a> AAL FY22 Integrated Review p.8 (A$1bn program)</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a> ratio · <a class="ref" href="#D6">D6</a> for the A$1bn program reference</span></div>
+  <div class="card-row"><span class="label">Computation</span><span>
+    <div class="deriv-box">FY22 CAPEX = A$38.65m (S5 cash flow stmt p.16, comparative col)
+FY23 CAPEX = A$39.54m (S5 cash flow stmt p.16)
+FY24 CAPEX = A$106.83m (S3 cash flow stmt p.17)
+FY25 CAPEX = A$208.72m (S4 cash flow stmt p.17)
+
+Ramp = 208.72 / 38.65 = 5.40×</div>
+  </span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F6">F6</a> nominal AUD; CPI ~12% over FY22-FY25 → real ramp ~4.8× · <a class="ref risk" href="#F9">F9</a> A$1bn is "indicative" wording, not Board-committed</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> KPI banner · §1 Exec view · §3 CAPEX · league table FY24 + FY25 rows</div>
+</div>
+
+<!-- C004 -->
+<div class="card claim" id="C004">
+  <div class="card-header">
+    <span class="card-id">C004</span>
+    <span class="card-title">Sydney FY24 — highest aeronautical revenue per passenger</span>
+    <span class="card-value">A$29</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>SYD aero revenue/pax FY24 = A$29.36 — 1.53× the median A$19 across the 5 computable airports (SYD/MEL/BNE/PER/ADL)</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a> ACCC supp DB — published directly as derived line</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D1">D1</a> direct (and <a class="ref" href="#D2">D2</a> verifiable: A$1,189.8m aero rev / 40.53m pax = A$29.36)</span></div>
+  <div class="card-row"><span class="label">Drivers (in data)</span><span>Slot constraint (capped movements/hour) + 39% international pax share (highest in cohort) — international landing charges materially higher than domestic</span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F3">F3</a> pax denominator = ACCC scope · <a class="ref risk" href="#F8">F8</a> median moves when ADL added</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> KPI banner · §5 Yield · league table</div>
+</div>
+
+<!-- C005 -->
+<div class="card claim" id="C005">
+  <div class="card-header">
+    <span class="card-id">C005</span>
+    <span class="card-title">Hobart — disclosed CAPEX program ~A$350m+ (2024–27)</span>
+    <span class="card-value">~A$350m+</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>HBA disclosed program is the sum of 4 named projects underway 2024-27; ~A$350m+</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S9">S9</a> Hobart Airport project pages · <a class="ref" href="#S17">S17</a> Min K. King press releases · <a class="ref" href="#S15">S15</a> Australian Aviation</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D3">D3</a> sum · <a class="ref" href="#D6">D6</a> indicative (mixed lifecycle stages)</span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">A$130m runway (A$60m Cwlth + A$70m HIAL · Mar-2025 complete)
++ A$200m terminal doubling (2027 completion)
++ A$20m carparks/forecourt
++ ≥A$25m Cambridge MDP (approved Nov 2025)
+= ~A$375m disclosed program</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F9">F9</a> projects in different lifecycle stages (some completed, some in MDP) · not equivalent to audited annual CAPEX flow · <a class="ref risk" href="#F2">F2</a> HBA Master Plan 2022 PDF not extracted (>10MB)</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> KPI banner · §3.1 disclosed programs · §5 program cards</div>
+</div>
+
+<!-- C006 -->
+<div class="card claim" id="C006">
+  <div class="card-header">
+    <span class="card-id">C006</span>
+    <span class="card-title">Brisbane FY24 — EBITDA margin highest of ACCC-4</span>
+    <span class="card-value">57.8%</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>BNE underlying EBITDA / total revenue FY24 = 57.8%</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a> ACCC supp DB, sheet "BNE total and aero"</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a></span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">EBITDA proxy (A$566.42m operating profit excl landfill) / Revenue (A$979.14m) = 57.85%</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F4">F4</a> EBITDA = ACCC "operating profit excl landfill" not audited statutory EBITDA</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> league table · §5 yield narrative</div>
+</div>
+
+<!-- C007 -->
+<div class="card claim" id="C007">
+  <div class="card-header">
+    <span class="card-id">C007</span>
+    <span class="card-title">Perth FY24 — OPEX/pax outlier (A$23/pax)</span>
+    <span class="card-value">A$23/pax</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>PER OPEX/pax FY24 = A$23 — 1.31× cohort median (not flagged at 1.5× threshold but elevated)</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a> ACCC supp DB, sheet "PER total and aero"</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a></span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">OPEX FY24 (A$378m) / ACCC pax (16.14m incl FIFO) = A$23.4 → A$23</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F3">F3</a> ACCC pax includes FIFO charter (16.14m); BITRE RPT-only is 12.79m, which would give A$30/pax (32% higher reading)</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> league table · §4 OPEX narrative</div>
+</div>
+
+<!-- C008 -->
+<div class="card claim" id="C008">
+  <div class="card-header">
+    <span class="card-id">C008</span>
+    <span class="card-title">Adelaide FY24 — full audited series unlocked</span>
+    <span class="card-value">A$284.6m rev</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>ADL FY24 audited results: Revenue A$284.6m, CAPEX A$106.83m, underlying EBITDA A$173.4m, total assets A$2,004.6m</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S3">S3</a> AAL Annual Financial Report 30 Jun 2024 (PDF, 58pp)</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D1">D1</a> direct read for headline lines · <a class="ref" href="#D3">D3</a> for OPEX (sum of 7 expense lines)</span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">OPEX FY24 (D3 sum, A$m):
+  Employee  24,464
+  Services & utilities  61,690
+  Consultants  2,886
+  General admin  11,178
+  Expected credit loss  1,929
+  Leasing & maint  8,967
+  Loss on disposal  127
+= A$111.241m total OPEX
+
+Underlying EBITDA = Statutory EBITDA A$215.0m − FV gain A$41.6m = A$173.4m</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F4">F4</a> EBITDA = underlying (excl FV gain on investment properties) for cohort comparability · <a class="ref risk" href="#F3">F3</a> pax denominator = BITRE 8.25m vs AAL 8.54m</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> league table FY24 row · §3.1 ADL build-cycle · raw-data ADL section</div>
+</div>
+
+<!-- C009 -->
+<div class="card claim" id="C009">
+  <div class="card-header">
+    <span class="card-id">C009</span>
+    <span class="card-title">Cairns — A$155m NAIF concessional facility</span>
+    <span class="card-value">A$155m</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>NAIF approved A$155m concessional loan to NQA for Cairns + Mackay airport upgrades · investment decision Apr 2024 · A$1.4bn forecast economic benefit over loan life</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S8">S8</a> NAIF project page naif.gov.au · <a class="ref" href="#S17">S17</a> joint min press release 17 Jun 2024</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D1">D1</a> direct</span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">A$155m = NAIF facility maximum draw (shared between Cairns and Mackay)
+A$1.4bn = NAIF's published economic benefit forecast over loan life
+A$437.2m = GRP contribution (construction + first 10y ops)
+290 + 1,528 = construction + operational jobs (NAIF figures)</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span>Loan is shared between Cairns and Mackay — split not publicly disclosed · A$1.4bn benefit is forecast not actual</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §3.1 disclosed programs · §5 program cards · CNS supplementary disclosures in raw-data</div>
+</div>
+
+<!-- C010 -->
+<div class="card claim" id="C010">
+  <div class="card-header">
+    <span class="card-id">C010</span>
+    <span class="card-title">Canberra — A$3bn cumulative since 1998 (Capital Property Group claim)</span>
+    <span class="card-value">A$3bn+</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>"Over $3 billion into aviation, commercial and retail infrastructure since 1998" per Capital Property Group corporate disclosure</span></div>
+  <div class="card-row"><span class="label">Sources</span><span><a class="ref" href="#S10">S10</a> capitalpropertygroup.com.au "About Us" · <a class="ref" href="#S11">S11</a> PC sub056 (cited A$2bn as of 2018)</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D6">D6</a> indicative corporate disclosure</span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F9">F9</a> includes adjacent commercial property (Brindabella, Majura, Fairbairn) — not strictly airport CAPEX · 28-year cumulative figure, not annual flow</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §3.1 · §5 program cards · CBR supplementary disclosures</div>
+</div>
+
+<!-- C011 -->
+<div class="card claim" id="C011">
+  <div class="card-header">
+    <span class="card-id">C011</span>
+    <span class="card-title">Darwin — A$200m runway resurfacing (Defence-funded)</span>
+    <span class="card-value">A$200m</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>RAAF Base Darwin + DIA Joint User runway resurfacing program A$200m, phased 2023-25, Department of Defence funded</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S13">S13</a> Defence press release 13 Aug 2023 (snippet-fetched per <a class="ref risk" href="#F16">F16</a>)</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D1">D1</a></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F16">F16</a> snippet fetch (full HTML timed out) · funded by federal Defence, NOT on DIA balance sheet — should not be counted as DIA capex</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §3.1 · §5 DRW program card · DRW supplementary disclosures</div>
+</div>
+
+<!-- C012 -->
+<div class="card claim" id="C012">
+  <div class="card-header">
+    <span class="card-id">C012</span>
+    <span class="card-title">QAL group — apparent OPEX/pax of A$8 is structural artefact</span>
+    <span class="card-value">A$8 (artefact)</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>QAL group OPEX/pax of A$8 FY24 is 0.46× cohort median; flagged as outlier but driven by group-vs-pax-denominator issue, not real efficiency</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S7">S7</a> QAL group annual reports FY20-FY24</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F3">F3</a> group passenger denominator (8.34m FY24) includes Townsville/Mt Isa/Longreach with much smaller cost stacks · <a class="ref risk" href="#F4">F4</a> QAL group OPEX scope may not match ACCC convention · <a class="ref risk" href="#F5">F5</a> revenue scope · NOT comparable to ACCC-4 ratios</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> league table · §4 OPEX narrative</div>
+</div>
+
+<!-- C013 -->
+<div class="card claim" id="C013">
+  <div class="card-header">
+    <span class="card-id">C013</span>
+    <span class="card-title">Adelaide EBITDA margin 75.5% (statutory) is definitional, not real</span>
+    <span class="card-value">60.9% underlying</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>ADL statutory EBITDA margin FY24 of 75.5% is inflated by A$41.6m fair-value gain on investment properties; underlying margin is 60.9%</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S3">S3</a> AAL FY24 P&L line "Earnings before interest, taxes, depreciation and amortisation (EBITDA)" + Note 9 fair-value gain</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a></span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">Statutory EBITDA / Revenue = 215.004 / 284.610 = 75.5%
+Underlying EBITDA / Revenue = (215.004 − 41.576) / 284.610 = 173.428 / 284.610 = 60.9%</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F4">F4</a> Underlying figure used throughout report for cohort comparability; statutory shown only with explicit asterisk</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> league table (with asterisk) · §5 yield narrative</div>
+</div>
+
+<!-- C014 -->
+<div class="card claim" id="C014">
+  <div class="card-header">
+    <span class="card-id">C014</span>
+    <span class="card-title">Build-cycle vs steady-state — 4.7× spread within ACCC-4</span>
+    <span class="card-value">4.7×</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>FY24 CAPEX/revenue spread within the ACCC-4 cohort is 14.6% (SYD) to 68.2% (MEL) = 53.6 percentage points = 4.7×</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a> derived from C001 + C002</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D5">D5</a> cohort range</span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">68.2 / 14.6 = 4.67× → 4.7×</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F8">F8</a> if ADL FY25 (65.6%) included, range becomes 14.6% to 68.2% (still ACCC-4 bounded)</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §3 build-cycle pattern paragraph</div>
+</div>
+
+<!-- C015 -->
+<div class="card claim" id="C015">
+  <div class="card-header">
+    <span class="card-id">C015</span>
+    <span class="card-title">SYD aero share rose 52.7% → 62.7% FY20 → FY24</span>
+    <span class="card-value">+10pp</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>Sydney aeronautical share of total revenue moved from 52.7% (FY20) to 62.7% (FY24)</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a></span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a> aero rev / total rev for each year</span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F14">F14</a> driven by international pax recovery + slower non-aero recovery post take-private; not normalised for one-offs</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §5 yield narrative</div>
+</div>
+
+<!-- C016 -->
+<div class="card claim" id="C016">
+  <div class="card-header">
+    <span class="card-id">C016</span>
+    <span class="card-title">MEL FY21 OPEX/revenue exceeded 100% (real, not error)</span>
+    <span class="card-value">132.6%</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>MEL FY21 OPEX (A$503m) exceeded total revenue (A$379m) producing OPEX/rev of 132.6% and a negative operating profit of A$123.56m</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a></span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a></span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">503 / 379 = 1.326 → 132.6%
+Operating profit = 379 − 503 = −124m (≈ ACCC line A$−123.56m)</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span>Real disclosure, not extraction error · pandemic-period revenue collapse vs OPEX stickiness</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §4 OPEX recovery trajectory</div>
+</div>
+
+<!-- C017 -->
+<div class="card claim" id="C017">
+  <div class="card-header">
+    <span class="card-id">C017</span>
+    <span class="card-title">CBR FY07–FY13 average annual CAPEX = 1.24× revenue</span>
+    <span class="card-value">1.24×</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>"Average annual capital expenditure of the airport over the past seven years has been 1.24 times gross annual revenue" — CBR self-disclosure to PC inquiry 2018</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S11">S11</a> PC sub056 Capital Airport Group, 10 Sep 2018, p.~6 (verbatim quote)</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D1">D1</a> direct quote</span></div>
+  <div class="card-row"><span class="label">Caveats</span><span>Period FY07-FY13 only (build-out phase including A$480m terminal 2014); not current intensity · self-disclosed by airport in regulatory submission</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §3.1 disclosed programs · CBR program card</div>
+</div>
+
+<!-- C018 -->
+<div class="card claim" id="C018">
+  <div class="card-header">
+    <span class="card-id">C018</span>
+    <span class="card-title">Hobart pax 0.9m (1998) → 2.7m (FY23) — 3× over 25 yrs</span>
+    <span class="card-value">3.0×</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>HBA passenger growth 1998 (privatisation) to FY23 = 0.9m → 2.7m, equivalent to ~4.5%/yr CAGR</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S15">S15</a> HBA Submission 72 to Senate Regional and Rural Affairs Cttee, 30 Apr 2024, p.1</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D1">D1</a> direct + <a class="ref" href="#D2">D2</a> CAGR</span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">2.7 / 0.9 = 3.0× over 25 years
+CAGR = 3^(1/25) − 1 = 4.50%/yr</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span>Self-disclosed by HBA · not cross-validated against BITRE for FY1998 (BITRE series shorter)</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> HBA supplementary disclosures (raw-data)</div>
+</div>
+
+<!-- C019 -->
+<div class="card claim" id="C019">
+  <div class="card-header">
+    <span class="card-id">C019</span>
+    <span class="card-title">DIA 2043 forecast — 3.7-5.5m pax · A$1.8bn NT GSP</span>
+    <span class="card-value">~3× 2019</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>Darwin Master Plan 2023 forecasts 3.7-5.5m pax by 2043 (vs 2m pre-COVID 2019); A$1.8bn forecast NT GSP contribution; up to 7,400 jobs</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S12">S12</a> DIA 2023 Master Plan p.6, p.8-10</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D1">D1</a></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span>Forecast not actual; range is wide (3.7-5.5m) reflecting scenario uncertainty · 2043 horizon = 20 years out</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §3.1 DRW program card · DRW supplementary disclosures</div>
+</div>
+
+<!-- C020 -->
+<div class="card claim" id="C020">
+  <div class="card-header">
+    <span class="card-id">C020</span>
+    <span class="card-title">EBITDA margin recovery FY21 → FY24 (all ACCC-4)</span>
+    <span class="card-value">All recovered</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>All four ACCC-monitored airports recovered to above their pre-pandemic FY20 EBITDA margin by FY24 — SYD 57.1%, BNE 57.8%, MEL 49.6%, PER 43.2%</span></div>
+  <div class="card-row"><span class="label">Source</span><span><a class="ref" href="#S1">S1</a></span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a> across 4 airports × 5 years</span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F4">F4</a> EBITDA proxy = ACCC operating profit excl landfill</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §1 Exec view · §5 yield narrative · EBITDA margin chart</div>
+</div>
+
+<!-- C021 -->
+<div class="card claim" id="C021">
+  <div class="card-header">
+    <span class="card-id">C021</span>
+    <span class="card-title">ADL aero share FY22 → FY25: 39% → 50%</span>
+    <span class="card-value">+11pp</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>ADL aero share of total revenue rose from 39.3% (FY22) to 50.3% (FY25) — international recovery + price normalisation</span></div>
+  <div class="card-row"><span class="label">Sources</span><span><a class="ref" href="#S5">S5</a> + <a class="ref" href="#S3">S3</a> + <a class="ref" href="#S4">S4</a> Note 5 each year</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a></span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">FY22: 58.056 / 147.772 = 39.29%
+FY25: 160.003 / 318.206 = 50.28%
+Δ = 10.99pp ≈ 11pp</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span>—</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §5 yield · raw-data ADL section</div>
+</div>
+
+<!-- C022 -->
+<div class="card claim" id="C022">
+  <div class="card-header">
+    <span class="card-id">C022</span>
+    <span class="card-title">ADL FY25 CAPEX/revenue approaches MEL FY24 peak</span>
+    <span class="card-value">65.6% vs 68.2%</span>
+  </div>
+  <div class="card-row"><span class="label">Statement</span><span>ADL FY25 CAPEX/rev of 65.6% sits within 2.6 percentage points of MEL's FY24 build-cycle peak of 68.2%</span></div>
+  <div class="card-row"><span class="label">Sources</span><span><a class="ref" href="#S4">S4</a> ADL · <a class="ref" href="#S1">S1</a> MEL</span></div>
+  <div class="card-row"><span class="label">Derivation</span><span><a class="ref" href="#D2">D2</a></span></div>
+  <div class="card-row"><span class="label">Computation</span><span><div class="deriv-box">ADL FY25: 208.718 / 318.206 = 65.59%
+MEL FY24: 812.88 / 1,192 = 68.20%
+Gap: 2.61pp</div></span></div>
+  <div class="card-row"><span class="label">Caveats</span><span><a class="ref risk" href="#F5">F5</a> ADL revenue includes property businesses; MEL revenue per ACCC scope</span></div>
+  <div class="backlinks"><span class="label">Used in:</span> §1 Exec view · §3.1 ADL build-cycle · KPI banner</div>
+</div>
+
+
+<!-- ============================== -->
+<!-- SOURCES                        -->
+<!-- ============================== -->
+<h2 class="section" id="sources">Sources (S1–S17)</h2>
+
+<div class="card source" id="S1">
+  <div class="card-header"><span class="card-id">S1</span><span class="card-title">ACCC Airport Monitoring Report 2023-24 — supplementary database (XLSX)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, audited regulatory accounts (gold standard for SYD/MEL/BNE/PER)</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2023-24-supplementary-database_0.xlsx">accc.gov.au · supplementary-database FY07-08 to FY23-24</a></span></div>
+  <div class="card-row"><span class="label">Period</span><span>FY07-08 to FY23-24 multi-year time series</span></div>
+  <div class="card-row"><span class="label">Coverage</span><span>SYD, MEL, BNE, PER · revenue (split aero/non-aero), OPEX, CAPEX (asset additions), EBITDA proxy (operating profit excl landfill), passengers (ACCC scope), aircraft movements</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C001">C001</a> <a class="ref" href="#C002">C002</a> <a class="ref" href="#C004">C004</a> <a class="ref" href="#C006">C006</a> <a class="ref" href="#C007">C007</a> <a class="ref" href="#C014">C014</a> <a class="ref" href="#C015">C015</a> <a class="ref" href="#C016">C016</a> <a class="ref" href="#C020">C020</a> <a class="ref" href="#C022">C022</a></div>
+</div>
+
+<div class="card source" id="S2">
+  <div class="card-header"><span class="card-id">S2</span><span class="card-title">BITRE annual airport activity FY1985-86 to FY2024-25 (XLSX)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, government statistics</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://www.bitre.gov.au/sites/default/files/documents/web_airports_annual_fy_2024_25.xlsx">bitre.gov.au · web_airports_annual_fy_2024_25.xlsx</a></span></div>
+  <div class="card-row"><span class="label">Period</span><span>FY1985-86 to FY2024-25</span></div>
+  <div class="card-row"><span class="label">Coverage</span><span>All 20 top Australian airports · domestic + international + transit pax · RPT aircraft movements · international air freight</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> ADL pax denominator (<a class="ref" href="#C008">C008</a>) · cross-validation against ACCC for SYD/MEL/BNE/PER</div>
+</div>
+
+<div class="card source" id="S3">
+  <div class="card-header"><span class="card-id">S3</span><span class="card-title">AAL Annual Financial Report 30 Jun 2024 (PDF, 58pp)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, audited (AASB Tier 2 Simplified Disclosures)</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://corporate.adelaideairport.com.au/media/na2latfg/final_2024_financial_report-min.pdf">corporate.adelaideairport.com.au · final_2024_financial_report-min.pdf</a></span></div>
+  <div class="card-row"><span class="label">Period</span><span>FY24 + FY23 comparatives</span></div>
+  <div class="card-row"><span class="label">Coverage</span><span>P&L, balance sheet, cash flow, notes incl. Note 5 revenue split (aero/commercial/property/parking/other)</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C008">C008</a> <a class="ref" href="#C013">C013</a> <a class="ref" href="#C021">C021</a></div>
+</div>
+
+<div class="card source" id="S4">
+  <div class="card-header"><span class="card-id">S4</span><span class="card-title">AAL Annual Financial Report 30 Jun 2025 (PDF, 57pp)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, audited</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://corporate.adelaideairport.com.au/media/uz3plvos/aal-financial-report-fy25_final-min.pdf">corporate.adelaideairport.com.au · aal-financial-report-fy25_final-min.pdf</a></span></div>
+  <div class="card-row"><span class="label">Period</span><span>FY25 + FY24 comparatives</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C021">C021</a> <a class="ref" href="#C022">C022</a></div>
+</div>
+
+<div class="card source" id="S5">
+  <div class="card-header"><span class="card-id">S5</span><span class="card-title">AAL Annual Financial Report 30 Jun 2023 (PDF, 57pp)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, audited (user-supplied 2026-04-27)</span></div>
+  <div class="card-row"><span class="label">Period</span><span>FY23 + FY22 comparatives — this is the source of ADL's FY22 audited figures</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C008">C008</a> <a class="ref" href="#C021">C021</a></div>
+</div>
+
+<div class="card source" id="S6">
+  <div class="card-header"><span class="card-id">S6</span><span class="card-title">AAL Integrated Review 2022 (PDF, 89pp)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary narrative + summary financials (user-supplied)</span></div>
+  <div class="card-row"><span class="label">Period</span><span>FY22 reporting period; references FY21 and FY18 baselines</span></div>
+  <div class="card-row"><span class="label">Key disclosures</span><span>p.8 — A$1bn 10-year indicative infrastructure program · p.9 — A$200m terminal expansion practical completion · p.81 — FY22 results commentary · FY21 derivable from p.81 narrative</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C003">C003</a> (A$1bn program reference)</div>
+</div>
+
+<div class="card source" id="S7">
+  <div class="card-header"><span class="card-id">S7</span><span class="card-title">QAL Annual Reports FY20–FY24 (group-level, 4-airport consolidation)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, audited (group not standalone)</span></div>
+  <div class="card-row"><span class="label">Coverage</span><span>Gold Coast + Townsville + Mt Isa + Longreach consolidated · revenue + OPEX + EBITDA + total assets · NO aero/non-aero split, NO CAPEX line</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C012">C012</a></div>
+</div>
+
+<div class="card source" id="S8">
+  <div class="card-header"><span class="card-id">S8</span><span class="card-title">NAIF North Queensland Airports project page</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://www.naif.gov.au/our-projects/north-queensland-airports/">naif.gov.au/our-projects/north-queensland-airports/</a></span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary government disclosure</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C009">C009</a></div>
+</div>
+
+<div class="card source" id="S9">
+  <div class="card-header"><span class="card-id">S9</span><span class="card-title">Hobart Airport project pages (projects.hobartairport.com.au)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary corporate disclosure</span></div>
+  <div class="card-row"><span class="label">Coverage</span><span>Per-project disclosure: A$130m runway, A$200m terminal, A$20m carparks/forecourt</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C005">C005</a></div>
+</div>
+
+<div class="card source" id="S10">
+  <div class="card-header"><span class="card-id">S10</span><span class="card-title">Capital Property Group corporate "About Us"</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://www.capitalpropertygroup.com.au/about-us">capitalpropertygroup.com.au/about-us</a></span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary corporate (D6 indicative — not audited per-FY)</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C010">C010</a></div>
+</div>
+
+<div class="card source" id="S11">
+  <div class="card-header"><span class="card-id">S11</span><span class="card-title">Productivity Commission inquiry submissions</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://www.pc.gov.au/inquiries-and-research/airports-2019/submissions/">pc.gov.au · airports-2019 submissions</a></span></div>
+  <div class="card-row"><span class="label">Coverage</span><span>sub031 HBA · sub008 NTA (Darwin) · sub049 NQA (Cairns) · sub056 CBR (Capital Airport Group)</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C010">C010</a> <a class="ref" href="#C017">C017</a></div>
+</div>
+
+<div class="card source" id="S12">
+  <div class="card-header"><span class="card-id">S12</span><span class="card-title">DIA 2023 Master Plan Preliminary Draft (PDF)</span></div>
+  <div class="card-row"><span class="label">URL</span><span><a href="https://www.darwinairport.com.au/sites/default/files/2023-09/DIA%202023%20Master%20Plan%20-%20Preliminary%20Draft%20-%20Sep%202023.pdf">darwinairport.com.au · DIA 2023 Master Plan Sep 2023</a></span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C019">C019</a></div>
+</div>
+
+<div class="card source" id="S13">
+  <div class="card-header"><span class="card-id">S13</span><span class="card-title">Department of Defence press release 13 Aug 2023 (Darwin runway)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, snippet-fetched (full HTML timed out)</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C011">C011</a> · <a class="ref risk" href="#F16">F16</a> applies</div>
+</div>
+
+<div class="card source" id="S14">
+  <div class="card-header"><span class="card-id">S14</span><span class="card-title">Palisade Investment Partners press release (DIA 23% shareholder)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary corporate</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> DIA historical capex disclosures (raw-data DRW section)</div>
+</div>
+
+<div class="card source" id="S15">
+  <div class="card-header"><span class="card-id">S15</span><span class="card-title">Australian Aviation / Tasmanian Times news coverage</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Secondary news (cross-validation only)</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C005">C005</a> (HBA) · <a class="ref" href="#C018">C018</a></div>
+</div>
+
+<div class="card source" id="S16">
+  <div class="card-header"><span class="card-id">S16</span><span class="card-title">Wikipedia (capacity facts only — runway counts, terminal m²)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Tertiary; flagged for re-verification before external publication</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> Capacity sub-rows in raw-data per airport</div>
+</div>
+
+<div class="card source" id="S17">
+  <div class="card-header"><span class="card-id">S17</span><span class="card-title">Min Catherine King / Madeleine King press releases (federal infra)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary government, captured via WebSearch snippet (full HTML timed out)</span></div>
+  <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C005">C005</a> (HBA runway) · <a class="ref" href="#C009">C009</a> (NAIF Cairns) · <a class="ref risk" href="#F16">F16</a> applies</div>
+</div>
+
+
+<!-- ============================== -->
+<!-- RISKS                          -->
+<!-- ============================== -->
+<h2 class="section" id="risks">Accuracy risks (F1–F16)</h2>
+
+<div class="card risk" id="F1">
+  <div class="card-header"><span class="card-id risk-high">F1</span><span class="card-title">Incomplete in-PDF extraction</span><span class="impact high">High</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>When agents retrieved PDFs, they stopped at the first match for keywords (e.g., "capex commitments" in a notes section) instead of drilling to the full cash-flow statement page where the actual CAPEX cash-flow line lives.</span></div>
+  <div class="card-row"><span class="label">Example</span><span>Original AAL FY24 pass captured "A$74m capex commitments" but missed the A$106.83m CAPEX cash-flow line on p.17 of the same PDF.</span></div>
+  <div class="card-row"><span class="label">Mitigation</span><span>Re-extracted in 2026-04-27 enrichment pass (now <a class="ref" href="#C008">C008</a>). QAL aero/non-aero split likely sits unread in QAL annual reports.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> Originally <a class="ref" href="#C008">C008</a> · still potentially affects QAL <a class="ref" href="#C012">C012</a></div>
+</div>
+
+<div class="card risk" id="F2">
+  <div class="card-header"><span class="card-id risk-high">F2</span><span class="card-title">WebFetch 10MB limit treated as "data not available"</span><span class="impact high">High</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>HBA Master Plan 2022 (>10MB), AAL Integrated Review FY22 (16MB), ADG White Paper submission (>10MB) — all exceeded the WebFetch tool size limit and were flagged "could not access" instead of falling back to curl + local pypdf parsing.</span></div>
+  <div class="card-row"><span class="label">Mitigation</span><span>AAL FY22 unblocked when user supplied PDF directly. HBA Master Plan still not extracted.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C005">C005</a> (HBA program would be more precise with full master plan)</div>
+</div>
+
+<div class="card risk" id="F3">
+  <div class="card-header"><span class="card-id risk-high">F3</span><span class="card-title">Pax denominator inconsistency across cohort</span><span class="impact high">High</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Different airports use different passenger denominators in their per-pax ratios.</span></div>
+  <div class="card-row"><span class="label">Detail</span><span>
+    PER: ACCC pax incl FIFO (16.14m FY24)<br>
+    SYD/MEL/BNE: ACCC pax matching financial scope<br>
+    ADL: BITRE RPT pax (8.25m FY24); AAL itself reports 8.54m incl transit/transfer<br>
+    QAL group: group pax (8.34m FY24, 4 airports consolidated)
+  </span></div>
+  <div class="card-row"><span class="label">Implication</span><span>Cross-airport per-pax ratios are NOT strictly comparable. PER's A$23 OPEX/pax vs ADL's A$13 includes denominator effect.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C004">C004</a> <a class="ref" href="#C007">C007</a> <a class="ref" href="#C008">C008</a> <a class="ref" href="#C012">C012</a></div>
+</div>
+
+<div class="card risk" id="F4">
+  <div class="card-header"><span class="card-id risk-high">F4</span><span class="card-title">EBITDA definition drift</span><span class="impact high">High</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>"EBITDA" means three different things across the cohort.</span></div>
+  <div class="card-row"><span class="label">Detail</span><span>
+    ACCC-4: "operating profit excl landfill" from supp DB<br>
+    ADL: "underlying EBITDA" (excl FV gain on investment properties; A$41.6m FY24, A$67.6m FY25)<br>
+    QAL group: group EBITDA incl property/development gains; 4-airport scope
+  </span></div>
+  <div class="card-row"><span class="label">Mitigation</span><span>Best practice: report EBITDA/pax (less scope-sensitive than margin) for cross-airport comparisons. ADL statutory margin (75.5% FY24) shown only with explicit asterisk.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C006">C006</a> <a class="ref" href="#C012">C012</a> <a class="ref" href="#C013">C013</a> <a class="ref" href="#C020">C020</a></div>
+</div>
+
+<div class="card risk" id="F5">
+  <div class="card-header"><span class="card-id risk-medium">F5</span><span class="card-title">Revenue scope difference</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>ACCC monitoring captures revenue from regulated services (aero + commercial on regulated airport site). AAL/QAL/private corporate accounts capture all entity revenue, which may include non-airport property.</span></div>
+  <div class="card-row"><span class="label">Implication</span><span>Revenue-denominator ratios (CAPEX/rev, OPEX/rev, EBITDA margin) are not strictly comparable across regulated and unregulated airports.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C001">C001</a> <a class="ref" href="#C002">C002</a> <a class="ref" href="#C022">C022</a></div>
+</div>
+
+<div class="card risk" id="F6">
+  <div class="card-header"><span class="card-id risk-medium">F6</span><span class="card-title">Nominal vs real terms</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>All figures AUD nominal — no CPI adjustment. ABS CPI cumulative: FY20-FY24 ~18%, FY20-FY25 ~22%, FY22-FY25 ~12%.</span></div>
+  <div class="card-row"><span class="label">Example</span><span>ADL "5.4× CAPEX ramp FY22→FY25" (<a class="ref" href="#C003">C003</a>) includes ~12% CPI; real ramp ≈ 4.8×.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C003">C003</a> · all multi-year averages</div>
+</div>
+
+<div class="card risk" id="F7">
+  <div class="card-header"><span class="card-id risk-medium">F7</span><span class="card-title">5-year averages — computation method ambiguity</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>"5-year cumulative average" can mean cumulative-weighted (Σ CAPEX / Σ pax) or arithmetic mean of 5 annual ratios. Different result on COVID-distorted series.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> All "5y avg" figures in raw-data and benchmark-tables</div>
+</div>
+
+<div class="card risk" id="F8">
+  <div class="card-header"><span class="card-id risk-medium">F8</span><span class="card-title">Outlier-flag medians not always recomputed when cohort changed</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Original cohort median CAPEX/pax = A$13.5 (n=4 ACCC). Adding ADL FY24 (A$13) lowers the median to A$11.5 (n=5). Some narrative still references the old "× median" figures.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C001">C001</a> <a class="ref" href="#C002">C002</a> <a class="ref" href="#C004">C004</a></div>
+</div>
+
+<div class="card risk" id="F9">
+  <div class="card-header"><span class="card-id risk-medium">F9</span><span class="card-title">Soft / aspirational figures treated as hard</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Several headline figures are program-totals or aspirational targets, not committed/audited.</span></div>
+  <div class="card-row"><span class="label">Examples</span><span>HBA "~A$350m+" = sum of named projects (some still in MDP); ADL "A$1bn 10-year program" wording is "indicative"; CBR "A$3bn since 1998" includes adjacent commercial property; CNS "A$1bn" is Land Use Plan vision</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C005">C005</a> <a class="ref" href="#C010">C010</a></div>
+</div>
+
+<div class="card risk" id="F10">
+  <div class="card-header"><span class="card-id risk-low">F10</span><span class="card-title">Year-boundary ambiguity</span><span class="impact low">Low</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>"FY24" = year ended 30 Jun 2024 (Australian); ACCC labels as "2023-24"; calendar-year sources (some news) say "2024" meaning Jan-Dec.</span></div>
+  <div class="card-row"><span class="label">Status</span><span>Verified clean for ACCC + BITRE primary sources used in this report.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> No headline claim affected</div>
+</div>
+
+<div class="card risk" id="F11">
+  <div class="card-header"><span class="card-id risk-medium">F11</span><span class="card-title">Discrepancy reconciliation incomplete</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Where multiple sources publish the same figure, discrepancies were flagged in collector summary but not always reflected per-cell in raw-data tables.</span></div>
+  <div class="card-row"><span class="label">Examples</span><span>PER FY24 pax: ACCC 16.14m vs BITRE 12.79m (26% gap, FIFO inclusion); ADL FY24 pax: AAL 8.54m vs BITRE 8.25m (3.5% gap); BNE FY24 ATMs: ACCC 222.5k vs BITRE 188k</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C007">C007</a></div>
+</div>
+
+<div class="card risk" id="F12">
+  <div class="card-header"><span class="card-id risk-low">F12</span><span class="card-title">Tertiary sources embedded</span><span class="impact low">Low</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Some capacity figures (runway counts, terminal m²) come from Wikipedia (S16). Marked tertiary but figures still propagate.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> Capacity sub-rows in raw-data per airport (no headline claim)</div>
+</div>
+
+<div class="card risk" id="F13">
+  <div class="card-header"><span class="card-id risk-medium">F13</span><span class="card-title">PDF text-extraction errors not QA'd</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>pypdf can misread tables (column alignment, en-dash vs minus, parenthesised negatives). No second-eye QA on each extracted line.</span></div>
+  <div class="card-row"><span class="label">Status</span><span>Highest-impact figures (CAPEX, revenue, EBITDA, total assets) spot-checked against PDF source. Residual ~2-3 of 200+ data points may have errors.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> Marginal; all spot-checked claims validated</div>
+</div>
+
+<div class="card risk" id="F14">
+  <div class="card-header"><span class="card-id risk-medium">F14</span><span class="card-title">One-off items not consistently normalised</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Several years had unusual items distorting comparisons.</span></div>
+  <div class="card-row"><span class="label">Examples</span><span>FY21 JobKeeper subsidies (all airports); FY21 ADL Virgin debt recovery (~A$3.5m); SYD FY24 A$9.6bn one-off non-cash unitholder distribution; ADL FV gains FY22 A$48.5m / FY24 A$41.6m / FY25 A$67.6m</span></div>
+  <div class="card-row"><span class="label">Status</span><span>Major items (SYD A$9.6bn, ADL FV gains) explicitly flagged. Smaller items (JobKeeper, debt recovery) not normalised.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C002">C002</a> <a class="ref" href="#C013">C013</a> <a class="ref" href="#C015">C015</a></div>
+</div>
+
+<div class="card risk" id="F15">
+  <div class="card-header"><span class="card-id risk-low">F15</span><span class="card-title">Source-document chain of custody not verified</span><span class="impact low">Low</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>AAL PDFs supplied via user's local Desktop (filename suggests print-shop origin: NJ01710, NJ01810). Auditor signatures within PDFs noted but not formally verified against AAL's announced auditor.</span></div>
+  <div class="card-row"><span class="label">Recommend</span><span>For external publication, re-fetch the same PDFs from corporate.adelaideairport.com.au directly to confirm authenticity.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C008">C008</a> <a class="ref" href="#C013">C013</a></div>
+</div>
+
+<div class="card risk" id="F16">
+  <div class="card-header"><span class="card-id risk-low">F16</span><span class="card-title">Snippet-based extraction</span><span class="impact low">Low</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Several minister.infrastructure.gov.au and defence.gov.au press releases timed out on direct WebFetch; figures captured via WebSearch result snippets instead.</span></div>
+  <div class="card-row"><span class="label">Status</span><span>Snippet-sourced figures flagged "(via search snippet)" in sources.md.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C005">C005</a> <a class="ref" href="#C011">C011</a> · sources <a class="ref" href="#S13">S13</a> <a class="ref" href="#S17">S17</a></div>
+</div>
+
+
+<!-- ============================== -->
+<!-- METHODOLOGY                    -->
+<!-- ============================== -->
+<h2 class="section" id="methodology">Methodology</h2>
+
+<div class="card">
+  <p><strong>How to use this audit.</strong> Before quoting any figure externally:</p>
+  <ol>
+    <li>Look up the figure in the <a href="#claims">Claims</a> section to find its claim ID (C001–C022)</li>
+    <li>Confirm the source (S1–S17) and derivation (D1–D6) — direct read or computed</li>
+    <li>Read the listed risks (F1–F16) — especially F3 (denominator) and F4 (EBITDA definition) for any cross-airport comparison</li>
+    <li>If the claim involves "× median" — recompute against the current cohort-of-disclosure since medians shifted when ADL was added</li>
+    <li>If the claim involves a multi-year average crossing FY20-FY25 — restate to real terms using ABS CPI before publishing</li>
+  </ol>
+  <p><strong>Strongest series in this report:</strong> the <a class="ref" href="#S1">S1</a> ACCC supplementary database series for SYD/MEL/BNE/PER FY20-FY24 (audited regulatory accounts) and the <a class="ref" href="#S3">S3</a> + <a class="ref" href="#S4">S4</a> + <a class="ref" href="#S5">S5</a> AAL FY22-FY25 cash-flow CAPEX line (audited per AASB Tier 2). Everything else carries one or more of the F1-F16 caveats.</p>
+</div>
+
+</main>
+</div>
+
+<a href="#" class="top-link">↑ Top</a>
+
+<script>
+// Filter buttons
+const buttons = document.querySelectorAll('nav.side button[data-filter]');
+buttons.forEach(b => b.addEventListener('click', () => {
+  buttons.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  const filter = b.dataset.filter;
+  document.querySelectorAll('.card').forEach(c => {
+    if (filter === 'all') {
+      c.classList.remove('hidden');
+    } else {
+      c.classList.toggle('hidden', !c.classList.contains(filter));
+    }
+  });
+  // Hide / show section headers based on whether any cards in section are visible
+  document.querySelectorAll('h2.section').forEach(h => {
+    const id = h.id;
+    if (filter === 'all') { h.classList.remove('hidden'); return; }
+    if (id === 'claims') h.classList.toggle('hidden', filter !== 'claim');
+    else if (id === 'sources') h.classList.toggle('hidden', filter !== 'source');
+    else if (id === 'risks') h.classList.toggle('hidden', filter !== 'risk');
+    else if (id === 'legend' || id === 'methodology') h.classList.toggle('hidden', filter !== 'all');
+  });
+}));
+</script>
+
+</body>
+</html>
