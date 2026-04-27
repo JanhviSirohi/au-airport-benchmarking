@@ -1,4 +1,6 @@
 # Arithmetic Spot-Check — Headline Numbers
+**Version:** 1.0 · **Author:** Janhvi Sirohi (out-read.com) · **Prepared for:** KPMG
+
 
 **Date performed:** 2026-04-27
 **Scope:** Top 10 headline numbers in the report verified directly against primary-source data (ACCC AMR 2024-25 supplementary database; AAL FY24/FY25 audited financial reports; QAL 2025 Annual Report).
@@ -22,5 +24,8 @@
 **Result:** **10 of 10 headline numbers verified against primary source data.** No discrepancies between report figures and source data.
 
 **Note on claim 10:** PER CAPEX/pax of A$16.62 rounds to A$17 under the report's rounding convention (nearest A$). Some readers may prefer to see this as A$17 (rounded) or A$16.62 (unrounded); both are correct.
+
+
+**Source-DB note:** All ACCC-sourced figures verified against the ACCC Airport Monitoring Report 2024-25 supplementary database (published 5 March 2026; covers FY07-08 to FY24-25). FY24 cells in this report use AMR 2024-25 revised values (which restate some prior-year figures versus the earlier AMR 2023-24 release).
 
 **Spot-check coverage:** This verification covers the top 10 headline numbers but is not exhaustive. The report contains ~200+ data points; F13 in the audit notes residual extraction-error risk on the order of ~2–3 of 200+ data points. Lower-priority figures (e.g., capacity floor area, FY20–FY22 historical FTE counts) have not been independently re-verified at this level of rigour and remain subject to F13.

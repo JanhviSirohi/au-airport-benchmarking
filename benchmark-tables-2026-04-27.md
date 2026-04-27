@@ -1,4 +1,6 @@
 # Australian airport benchmarking — derived metrics
+**Version:** 1.0 · **Date:** 2026-04-27 · **Author:** Janhvi Sirohi (out-read.com) · **Prepared for:** KPMG
+
 Generated: 2026-04-27
 Raw data: raw-data-2026-04-27.md
 Sources: sources.md
@@ -19,7 +21,7 @@ Sydney FY24 EBITDA = ACCC "Total airport operating profit (excluding landfill)" 
 
 ## 0. Completeness map
 
-Cell legend: `Y` = computable from raw data this pass; `n` = input missing (raw data flagged n/a or unavailable); `*` = computable but with denominator caveat (see notes below).
+Cell legend: `Y` = computable from raw data current engagement scope; `n` = input missing (raw data flagged n/a or unavailable); `*` = computable but with denominator caveat (see notes below).
 
 ### 0.1 Financial inputs
 
@@ -67,7 +69,7 @@ Cell legend: `Y` = computable from raw data this pass; `n` = input missing (raw 
 | DRW | n | n | n | n | n | n | n | n | n | n | n | n | n | n | n | n |
 | CNS | n | n | n | n | n | n | n | n | n | n | n | n | n | n | n | n |
 
-CBR/HBA/DRW/CNS are **operational only** at this pass (pax × ATM ratios in Section 2.3 footnote where computable from BITRE-only inputs, but no AUD ratios).
+CBR/HBA/DRW/CNS are **operational only** at current engagement scope (pax × ATM ratios in Section 2.3 footnote where computable from BITRE-only inputs, but no AUD ratios).
 
 ---
 
@@ -359,7 +361,7 @@ Arithmetic consistency checks (raw-data spot checks):
 - **Per-FTE only computable for ACCC-monitored airports.** ADL/QAL/CBR/HBA/DRW/CNS FTE not in extracted scope.
 - **5y cumulative figures** use only the years for which **both** numerator and denominator are present. ADL 5y figures use FY23+FY24 only (n=2) and are flagged as such. No imputation of missing years.
 - **Outlier thresholding** is mechanical (1.5× / 0.5× the cohort median for that metric in that year, with COVID years FY20–FY22 flagged separately). Structural reasons cited come **only** from disclosed facts in the raw-data file (build-out phase, regulatory-account convention, FIFO mix at Perth, group reporting at QAL, take-private recognition at SYD). Where the raw data does not support a structural reason, the flag is recorded without explanation.
-- **Excluded ratios (not computable on this pass):**
+- **Excluded ratios (not computable on current engagement scope):**
   - ADL: all CAPEX-based ratios (CAPEX/pax, CAPEX/rev, CAPEX/assets, CAPEX/ATM, CAPEX-OPEX); FY20–FY22 financials missing.
   - QAL/OOL: all aero / non-aero per-pax and aero-share ratios (no aero/non-aero split in QAL annual reports extracted); CAPEX-based ratios (CAPEX line not extracted); asset turnover (total assets not extracted).
   - CBR / HBA / DRW / CNS: every AUD-denominated derived ratio.

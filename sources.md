@@ -1,5 +1,6 @@
-# Sources — Australian airport benchmarking
-Accessed: 2026-04-27
+# Sources — Australian Airport Investment & Expenditure Benchmarking
+**Version:** 1.0 · **Date:** 2026-04-27 · **Author:** Janhvi Sirohi · **Prepared for:** KPMG · Accessed: 2026-04-27
+
 
 ## ACCC Airport Monitoring Reports
 
@@ -10,7 +11,7 @@ Accessed: 2026-04-27
 - AAL Integrated Report 2025 — published Oct/Nov 2025
 - QAL Group Annual Report 2025 — published Oct/Nov 2025
 - BITRE monthly file — Nov 2025 latest (no FY25 implication beyond annual file)
-- No new ACCC inquiry, Productivity Commission inquiry into airports, or Master Plans published since prior pass
+- No new ACCC inquiry, Productivity Commission airports inquiry, or master plans published as of the access date (27 April 2026)
 - QAL Annual Reports 2022, 2023, 2024, 2025 — full set retrieved; QAL 2022 AR p.7 contains 8-year P&L series FY15–FY22, extended to FY25 via subsequent reports (11-year series). Gold Coast project-level capex disclosed: A$500m precinct, A$260m terminal expansion (Sep 2022), A$17m ETROO (FY25), A$4m Vertical Transport, ~A$22m loan-funded project. **No full audited financial statements / cash-flow CAPEX / aero-non-aero split / Gold Coast standalone — these gaps remain across all 4 QAL annual reports and would require ASIC company filings.**
 
 ### ACCC AMR 2024-25 (published 5 March 2026)
@@ -119,7 +120,7 @@ Accessed: 2026-04-27
 - https://aviationnews-online.com/public/article/australias-four-largest-airports-report-combined — accessed 2026-04-27
 - https://australianaviation.com.au/2024/04/hobart-exceeds-pre-covid-figures-ahead-of-rivals/ — Hobart pax growth narrative — accessed 2026-04-27
 
-## Recommended next-pass primary sources (not retrieved this pass)
+## Recommended primary sources for follow-up engagement
 - ASIC company filings (ASIC Connect / paid extracts) for: Hobart International Airport Pty Ltd, Capital Airport Group Pty Ltd, Canberra Airport Pty Ltd, Northern Territory Airports Pty Ltd, Darwin International Airport Pty Ltd, Cairns Airport Pty Ltd, North Queensland Airports — to obtain audited consolidated financial statements FY20-FY24 not posted on corporate websites.
 - Productivity Commission Airports Inquiry (2023-25): full submissions index at https://www.pc.gov.au/inquiries/completed/airports — for benchmark figures cited in submissions.
 - Australian Airports Association (https://www.airports.asn.au) for industry aggregates.
@@ -197,10 +198,10 @@ Accessed: 2026-04-27
 - https://www.pc.gov.au/inquiries-and-research/airports-2019/submissions/ — PC Economic Regulation of Airports 2019 — full submissions index (97 submissions; HBA sub031, NTA sub008, NQA sub049, CBR sub003/056/068/DR145/DR169) — accessed 2026-04-27
 - https://www.pc.gov.au/inquiries/completed/airports-2019 — PC Airports 2019 inquiry landing — accessed 2026-04-27
 
-### Sources tried but inaccessible / partial (2026-04-27 pass)
+### Sources identified but inaccessible or partially retrieved (as of 2026-04-27)
 
 - Hobart Airport Master Plan 2022 PDF — exceeded WebFetch size limit; key figures sourced via Australian Aviation / Tasmanian Times / HBA submission 72
 - Tasmanian Parliament HBA submission PDF (parliament.tas.gov.au/__data/assets/pdf_file/0018/81036/) — text not extractable from 2004-vintage scanned PDF
 - ADG Aviation White Paper submission (infrastructure.gov.au/...agp2023-submission-c234) — exceeded WebFetch size limit
 - Cairns Airport Master Plan PDF — no public PDF URL located on cairnsairport.com.au (/corporate/development/master-plan/ returns 404)
-- PC regional airfares sub098 (Mar 2026) — deferred to next pass
+- PC regional airfares sub098 (Mar 2026) — identified for follow-up review

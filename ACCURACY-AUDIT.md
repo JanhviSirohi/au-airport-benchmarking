@@ -1,6 +1,6 @@
 # Accuracy Audit & Source Trace
 **File:** ACCURACY-AUDIT.md
-**Date:** 2026-04-27
+**Version:** 1.0 · **Date:** 2026-04-27 · **Author:** Janhvi Sirohi (out-read.com · janhvi@out-read.com) · **Prepared for:** KPMG
 **Purpose:** Catalogue every methodological caveat in this benchmarking, map every headline figure to its primary source, and document derivation logic for every computed metric. This file is the rigour layer — read it before quoting any number.
 
 The interactive companion to this document is [audit.html](audit.html), which presents the same content as filterable cards with cross-references between claims (C001–C022), sources (S1–S17), and risks (F1–F16).
@@ -10,7 +10,7 @@ The interactive companion to this document is [audit.html](audit.html), which pr
 ## Part 1 — Methodological caveats (F1–F16)
 
 ### F1 · PDF extraction completeness · medium impact
-For audited financial reports, the cash-flow statement line "Payments for property, plant and equipment, intangible assets and investment properties" is the authoritative CAPEX figure — distinct from "capital commitments" disclosed in the notes (forward-looking, not actual outlay). For every primary-source PDF, the cash-flow statement and revenue note are read in full and reconciled against summary tables in the directors' report. **Residual:** QAL group annual reports may contain aero/non-aero split and CAPEX detail in notes not in scope of this pass.
+For audited financial reports, the cash-flow statement line "Payments for property, plant and equipment, intangible assets and investment properties" is the authoritative CAPEX figure — distinct from "capital commitments" disclosed in the notes (forward-looking, not actual outlay). For every primary-source PDF, the cash-flow statement and revenue note are read in full and reconciled against summary tables in the directors' report. **Residual:** QAL group annual reports may contain aero/non-aero split and CAPEX detail in notes not within current engagement scope.
 
 ### F2 · Source-document size considerations · medium impact
 Large primary PDFs (>10 MB) — including the HBA Master Plan 2022 and the ADG Aviation Green Paper submission of November 2023 — require local extraction tooling rather than browser-style fetch. AAL Integrated Review FY22 (16 MB) was extracted in full. The HBA Master Plan 2022 is not yet extracted; the HBA program-total figure (C005) is sourced from per-project pages and ministerial press releases. Full master plan extraction would refine this figure and unlock a 10-year CAPEX schedule.
@@ -225,11 +225,11 @@ The following are documented but not directly comparable per-FY audited figures:
 
 1. **HBA / CBR / DRW / CNS audited annual CAPEX** — not publicly disclosed; only program totals available
 2. **OOL standalone P&L** — only QAL group available
-3. **ADL FY20** — pre-COVID year; AAL FY20 standalone Annual Financial Report not in scope of this pass
+3. **ADL FY20** — pre-COVID year; AAL FY20 standalone Annual Financial Report not within current engagement scope
 4. **ADL FY21** — derivable from FY22 Integrated Review narrative (revenue A$115.8 m, underlying EBITDA A$67.8 m); ADL FY21 standalone Annual Financial Report would be authoritative
 5. **All FTE / headcount data** — not consistently disclosed across the cohort
 6. **CAPEX-by-purpose split** — capacity / maintenance / commercial — not in any audited statement
-7. **International peer figures** (Auckland, Singapore Changi) — not in scope of this pass
+7. **International peer figures** (Auckland, Singapore Changi) — not within current engagement scope
 
 ---
 

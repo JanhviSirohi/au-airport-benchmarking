@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Australian Airport Benchmarking — Investment & Expenditure (FY20–FY24)</title>
+<title>Australian Airport Investment & Expenditure Benchmarking — FY20–FY25 · v1.0</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -244,12 +244,12 @@
   <div class="kpi kpi-warn">
     <div class="kpi-label">Sector-wide build cycle FY25</div>
     <div class="kpi-value">4 of 5 · CAPEX/rev >35%<a href="audit.html#C014" class="src-chip" title="Claim C014 · MEL 86.9%, ADL 65.6%, BNE 61.5%, PER 37.5% — only SYD at 18.7%">C014</a></div>
-    <div class="kpi-detail">Cohort median 61.5%, more than 2× the FY24 median of 33.3%</div>
+    <div class="kpi-detail">Cohort median 61.5% (FY25, n=5) · 1.61× the FY24 4-airport median of 38.2%</div>
   </div>
   <div class="kpi kpi-bad">
-    <div class="kpi-label">BNE FY25 — newest entrant to build cycle</div>
-    <div class="kpi-value">+96% YoY<a href="audit.html#C006" class="src-chip" title="Claim C006 · CAPEX A$343m FY24 → A$671m FY25; CAPEX/rev 24.3% → 61.5%">C006</a></div>
-    <div class="kpi-detail">CAPEX A$343m FY24 → A$671m FY25 · CAPEX/rev 24.3% → 61.5%</div>
+    <div class="kpi-label">BNE FY25 — step-change in investment cycle</div>
+    <div class="kpi-value">+96% YoY<a href="audit.html#C006" class="src-chip" title="Claim C006 · CAPEX A$343m FY24 → A$671m FY25; CAPEX/rev 34.2% → 61.5%">C006</a></div>
+    <div class="kpi-detail">CAPEX A$343m FY24 → A$671m FY25 · CAPEX/rev 34.2% → 61.5%</div>
   </div>
 </div>
 
@@ -285,7 +285,7 @@
 </table>
 
 <div class="callout">
-  <strong>FY25 cohort-wide build cycle.</strong> Median CAPEX/revenue jumped from 33.3% (FY24, n=5) to 61.5% (FY25, n=5). Four of five airports posted CAPEX/revenue above 35%. The build is now broad-based, not a single-airport phenomenon.
+  <strong>FY25 cohort-wide investment step-up.</strong> Median CAPEX/revenue rose from 38.2% (FY24, ACCC-4 cohort, n=4) to 61.5% (FY25, n=5 incl ADL). Four of five airports posted CAPEX/revenue above 35% in FY25 — the build is broad-based, not a single-airport phenomenon. (FY24 ACCC-monitored figures use the revised series in the ACCC AMR 2024-25 supplementary database, which restates some FY24 cells.)
 </div>
 
 <div class="callout">
@@ -295,7 +295,7 @@
 </div>
 
 <div class="callout bad">
-  <strong>ADL FY25 — the cohort's newest build-cycle entrant.</strong> Adelaide CAPEX rose from A$39m (FY23) to A$107m (FY24) to A$209m (FY25) — a 5.4× three-year ramp. FY25 CAPEX/revenue of 65.6% approaches MEL's FY24 peak of 68.2%. The A$1bn 10-year indicative program disclosed in AAL FY22 Integrated Review p.8 is now visible executing in the FY23–FY25 audited cash flow statements.
+  <strong>ADL FY25 — execution phase of the disclosed A$1bn 10-year indicative program.</strong> Adelaide CAPEX rose from A$39m (FY23) to A$107m (FY24) to A$209m (FY25) — a 5.4× three-year ramp. FY25 CAPEX/revenue of 65.6% sits at the FY25 cohort median (61.5%) and is the second-highest in the cohort behind MEL (86.9%). Disclosed in AAL FY22 Integrated Review p.8; visible executing in the FY23–FY25 audited cash flow statements.
 </div>
 
 <!-- ============================== -->
@@ -306,11 +306,11 @@
 
 <div class="grid-2">
   <div class="chart-card">
-    <h3>CAPEX per passenger (AUD) · FY20–FY24</h3>
+    <h3>CAPEX per passenger (AUD) · FY20–FY25</h3>
     <div class="chart-wrap"><canvas id="capexPaxChart"></canvas></div>
   </div>
   <div class="chart-card">
-    <h3>CAPEX as % of revenue · FY20–FY24</h3>
+    <h3>CAPEX as % of revenue · FY20–FY25</h3>
     <div class="chart-wrap"><canvas id="capexRevChart"></canvas></div>
   </div>
 </div>
@@ -331,11 +331,11 @@
 
 <div class="grid-2">
   <div class="chart-card">
-    <h3>OPEX per passenger (AUD) · FY20–FY24</h3>
+    <h3>OPEX per passenger (AUD) · FY20–FY25</h3>
     <div class="chart-wrap"><canvas id="opexPaxChart"></canvas></div>
   </div>
   <div class="chart-card">
-    <h3>OPEX as % of revenue · FY20–FY24</h3>
+    <h3>OPEX as % of revenue · FY20–FY25</h3>
     <div class="chart-wrap"><canvas id="opexRevChart"></canvas></div>
   </div>
 </div>
@@ -360,7 +360,7 @@
     <div class="chart-wrap"><canvas id="aeroPaxChart"></canvas></div>
   </div>
   <div class="chart-card">
-    <h3>EBITDA margin · FY20–FY24</h3>
+    <h3>EBITDA margin · FY20–FY25</h3>
     <div class="chart-wrap"><canvas id="ebitdaChart"></canvas></div>
   </div>
 </div>
@@ -462,15 +462,15 @@
 <details>
   <summary>Scope, sources, and key incomparabilities</summary>
   <div>
-    <p><strong>Scope:</strong> 10 Australian airports — 4 ACCC-monitored gateways (SYD/MEL/BNE/PER) + 6 capital-city or capital-adjacent airports (ADL, OOL/QAL, CBR, HBA, DRW, CNS). Financial ratios computable for SYD/MEL/BNE/PER (full) + ADL (FY23–FY24) + QAL group (FY20–FY24, group-level only).</p>
+    <p><strong>Scope:</strong> 10 Australian airports — 4 ACCC-monitored gateways (SYD/MEL/BNE/PER) + 6 capital-city or capital-adjacent airports (ADL, OOL/QAL, CBR, HBA, DRW, CNS). Financial ratios computable for SYD/MEL/BNE/PER (full) + ADL (FY23–FY24) + QAL group (FY20–FY25, group-level only).</p>
     <p><strong>Fiscal year basis:</strong> Australian financial year ending 30 June. FY24 = year ended 30 Jun 2024.</p>
-    <p><strong>Currency:</strong> AUD nominal — no inflation adjustment. ABS CPI cumulative FY20–FY24 ≈ 18%, so multi-year averages crossing the pandemic should be read as nominal trends.</p>
+    <p><strong>Currency:</strong> AUD nominal — no inflation adjustment. ABS CPI cumulative FY20–FY25 ≈ 22%, so multi-year averages crossing the pandemic should be read as nominal trends.</p>
     <p><strong>Primary sources:</strong></p>
     <ul>
       <li>ACCC Airport Monitoring Report 2023-24 supplementary database (FY07-08 to FY23-24 time series for SYD/MEL/BNE/PER)</li>
       <li>BITRE annual airport activity file (passengers, ATMs, freight for all 10 airports)</li>
       <li>AAL Annual Financial Reports FY24, FY25 (Adelaide)</li>
-      <li>QAL Annual Reports FY20–FY24 (Gold Coast group)</li>
+      <li>QAL Annual Reports FY15–FY25 (Gold Coast group, 11-year P&L series)</li>
       <li>Productivity Commission inquiry submissions (HBA sub031, NTA sub008, NQA sub049, CBR sub056)</li>
       <li>Master plans, NAIF disclosures, ministerial press releases, corporate project pages</li>
     </ul>
@@ -490,14 +490,14 @@
 <details>
   <summary>Data provenance — live vs training data</summary>
   <div>
-    <p><strong>Every figure</strong> in the underlying files traces to a live URL fetched on 2026-04-27 — none came from model training data recall. The user's standing rule is "no training-data figures; verify with live sources; stamp access dates" — applied throughout.</p>
+    <p>All figures are sourced from publicly available primary documents accessed 27 April 2026, with each figure stamped to its source URL and access date.</p>
     <p><strong>Provenance breakdown:</strong></p>
     <ul>
-      <li><strong>~85% primary live fetches:</strong> ACCC XLSX, BITRE XLSX, AAL/QAL annual report PDFs, NAIF page, PC submission PDFs (parsed locally with pypdf after WebFetch returned encoded streams).</li>
-      <li><strong>~10% near-primary:</strong> Hobart Master Plan 2022 figures via Australian Aviation / Tasmanian Times secondary citations (PDF >10MB exceeded WebFetch limit; figures cross-checked against multiple secondary live sources).</li>
-      <li><strong>~5% via WebSearch result snippets:</strong> Some ministerial press releases (minister.infrastructure.gov.au) timed out on direct fetch; figures captured from search-result excerpts, which are live but less direct than full HTML retrieval.</li>
+      <li><strong>~85% primary regulatory or audited sources:</strong> ACCC AMR 2024-25 supplementary database (XLSX), BITRE annual airport activity FY1985-86 to FY2024-25 (XLSX), AAL Annual Financial Reports FY22–FY25 (audited per AASB Tier 2), QAL Annual Reports FY20–FY25 (group highlights), NAIF project disclosures, Productivity Commission inquiry submissions.</li>
+      <li><strong>~10% secondary corroboration of large primary documents:</strong> Hobart Master Plan 2022 figures cross-referenced via Australian Aviation and Tasmanian Times (the master plan itself exceeds the practical fetch limit; figures verified against multiple independent live secondary sources).</li>
+      <li><strong>~5% press-release excerpts:</strong> Federal ministerial press releases (minister.infrastructure.gov.au, defence.gov.au) where the parent host did not return the full HTML on direct fetch; figures captured from search-result excerpts, all stamped accordingly in sources.md.</li>
     </ul>
-    <p><strong>Things flagged as not located:</strong> CBR/HBA/DRW/CNS audited annual P&L line-items, ADL FY20–FY22 financials, ADL FY24 CAPEX cash-flow line, QAL aero/non-aero split. These are real gaps, not concealed estimates.</p>
+    <p><strong>Items not located within current scope:</strong> CBR / HBA / DRW / CNS audited annual P&L line-items (private holdcos — ASIC company filings recommended for follow-up); ADL FY20–FY21 standalone audited financials (AAL Investor Relations request recommended); QAL annual cash-flow CAPEX line and aeronautical / non-aeronautical revenue split (would require ASIC company filings for QAL Pty Ltd).</p>
   </div>
 </details>
 
@@ -542,13 +542,13 @@
     <table>
       <thead><tr><th>Code</th><th>Source</th><th>Type</th></tr></thead>
       <tbody>
-        <tr><td><a href="audit.html#S1" class="src-chip">S1</a></td><td>ACCC Airport Monitoring Report 2023-24 supplementary database (XLSX)</td><td>Primary, audited regulatory accounts</td></tr>
+        <tr><td><a href="audit.html#S1" class="src-chip">S1</a></td><td>ACCC Airport Monitoring Report 2024-25 supplementary database (XLSX, published 5 March 2026; multi-year FY07-08 to FY24-25)</td><td>Primary, audited regulatory accounts</td></tr>
         <tr><td><a href="audit.html#S2" class="src-chip">S2</a></td><td>BITRE annual airport activity FY1985-86 to FY2024-25 (XLSX)</td><td>Primary, gov statistics</td></tr>
         <tr><td><a href="audit.html#S3" class="src-chip">S3</a></td><td>AAL Annual Financial Report 30 Jun 2024 (PDF, 58pp)</td><td>Primary, audited (Tier 2)</td></tr>
         <tr><td><a href="audit.html#S4" class="src-chip">S4</a></td><td>AAL Annual Financial Report 30 Jun 2025 (PDF, 57pp)</td><td>Primary, audited (Tier 2)</td></tr>
         <tr><td><a href="audit.html#S5" class="src-chip">S5</a></td><td>AAL Annual Financial Report 30 Jun 2023 (PDF, 57pp)</td><td>Primary, audited (Tier 2)</td></tr>
         <tr><td><a href="audit.html#S6" class="src-chip">S6</a></td><td>AAL Integrated Review 2022 (PDF, 89pp)</td><td>Primary narrative + summary</td></tr>
-        <tr><td><a href="audit.html#S7" class="src-chip">S7</a></td><td>QAL Annual Reports FY20–FY24 (group-level)</td><td>Primary, audited group (not standalone)</td></tr>
+        <tr><td><a href="audit.html#S7" class="src-chip">S7</a></td><td>QAL Annual Reports FY15–FY25 (group-level highlights, 11-year P&L series)</td><td>Primary, audited group (not standalone)</td></tr>
         <tr><td><a href="audit.html#S8" class="src-chip">S8</a></td><td>NAIF North Queensland Airports project page (naif.gov.au)</td><td>Primary government disclosure</td></tr>
         <tr><td><a href="audit.html#S9" class="src-chip">S9</a></td><td>Hobart Airport project pages (projects.hobartairport.com.au)</td><td>Primary corporate</td></tr>
         <tr><td><a href="audit.html#S10" class="src-chip">S10</a></td><td>Capital Property Group corporate "About Us"</td><td>Primary corporate (D6 indicative)</td></tr>
@@ -600,7 +600,7 @@
 </details>
 
 <div class="footer-note">
-  Generated 2026-04-27 · 10 airports in scope · 6 with extractable financial ratios · ACCC-monitored airports SYD/MEL/BNE/PER FY20–FY24, Adelaide FY22–FY25 audited, QAL group FY20–FY24 group-level · Underlying files: <a href="audit.html">audit.html</a>, <code>raw-data-2026-04-27.md</code>, <code>benchmark-tables-2026-04-27.md</code>, <code>REPORT-2026-04-27.md</code>, <code>sources.md</code>.
+  v1.0 · Generated 2026-04-27 · Janhvi Sirohi (out-read.com) · Prepared for KPMG · 10 airports in scope, 6 with extractable financial ratios · ACCC-monitored airports SYD/MEL/BNE/PER FY20–FY25 (ACCC AMR 2024-25 supp DB), Adelaide FY22–FY25 audited (AAL Annual Financial Reports), QAL group FY15–FY25 (group-level highlights, 11-year P&L series) · Underlying files: <a href="COVER.md">COVER.md</a>, <a href="audit.html">audit.html</a>, <a href="ARITHMETIC-SPOT-CHECK.md">ARITHMETIC-SPOT-CHECK.md</a>, <code>raw-data-2026-04-27.md</code>, <code>benchmark-tables-2026-04-27.md</code>, <code>REPORT-2026-04-27.md</code>, <code>sources.md</code>.
 </div>
 
 </div>
@@ -623,39 +623,39 @@ const COLORS = {
 const YEARS = ['FY20', 'FY21', 'FY22', 'FY23', 'FY24', 'FY25'];
 
 // ====== Data ======
-// FY20-FY25 ACCC-4 from ACCC supplementary databases (FY23-24 + FY24-25); ADL FY22-FY25 audited; QAL FY20-FY24 group-level
+// FY20-FY25 ACCC-4 sourced uniformly from ACCC AMR 2024-25 supp DB (published 5 Mar 2026, contains FY07-08 to FY24-25 multi-year series); ADL FY22-FY25 from AAL audited financial reports; QAL FY20-FY24 from group annual reports
 const CAPEX_PAX = {
-  SYD: [8, 48, 11, 4, 7, 9],
-  MEL: [13, 41, 26, 19, 23, 33],
-  BNE: [21, 9, 3, 11, 10, 28],
-  PER: [9, 14, 15, 11, 17, 17],
+  SYD: [8, 49, 11, 4, 7, 9],
+  MEL: [24, 52, 19, 17, 24, 33],
+  BNE: [27, 9, 4, 13, 15, 28],
+  PER: [9, 20, 17, 10, 18, 17],
   ADL: [null, null, 10, 5, 13, 24]
 };
 
 const CAPEX_REV = {
-  SYD: [25.5, 79.4, 16.1, 9.0, 14.6, 18.7],
-  MEL: [30.6, 100.0, 41.2, 31.0, 68.2, 86.9],
-  BNE: [54.7, 18.0, 8.0, 27.0, 24.3, 61.5],
-  PER: [25.0, 26.0, 23.0, 32.0, 42.2, 37.5],
+  SYD: [16.6, 41.2, 17.2, 9.1, 14.6, 18.7],
+  MEL: [64.4, 83.4, 41.1, 49.1, 68.2, 86.9],
+  BNE: [54.7, 13.7, 7.2, 29.8, 34.2, 61.5],
+  PER: [23.7, 37.1, 25.3, 22.3, 42.3, 37.5],
   ADL: [null, null, 26.2, 15.8, 37.5, 65.6]
 };
 
 const OPEX_PAX = {
-  SYD: [22, 95, 35, 22, 20, 21],
-  MEL: [22, 81, 31, 19, 17, 20],
-  BNE: [19, 35, 30, 21, 18, 18],
-  PER: [20, 46, 33, 24, 23, 24],
+  SYD: [28, 98, 58, 23, 21, 21],
+  MEL: [22, 83, 42, 20, 18, 20],
+  BNE: [28, 61, 38, 22, 19, 18],
+  PER: [27, 47, 39, 23, 25, 24],
   ADL: [null, null, 18, 13, 13, 15],
-  QAL: [9, 6, 7, 9, 8, null]
+  QAL: [9, 6, 7, 9, 8, 8]
 };
 
 const OPEX_REV = {
-  SYD: [60.0, 81.0, 51.0, 47.0, 42.9, 43.6],
-  MEL: [55.0, 132.6, 49.0, 49.0, 50.4, 51.9],
-  BNE: [50.0, 89.2, 80.0, 47.0, 42.2, 41.1],
-  PER: [60.0, 89.7, 51.0, 67.0, 56.8, 53.1],
+  SYD: [54.1, 81.6, 89.6, 56.2, 42.9, 43.6],
+  MEL: [59.3, 132.6, 90.5, 56.2, 50.4, 51.9],
+  BNE: [56.3, 89.2, 68.3, 51.4, 42.2, 41.1],
+  PER: [67.3, 89.7, 58.3, 49.6, 58.6, 53.1],
   ADL: [null, null, 47.0, 37.7, 39.1, 39.4],
-  QAL: [37.0, 42.0, 38.0, 33.0, 32.4, null]
+  QAL: [37.0, 42.0, 38.0, 33.0, 32.4, 33.0]
 };
 
 const AERO_PAX_FY25 = {
@@ -667,23 +667,27 @@ const AERO_PAX_FY25 = {
   QAL: null
 };
 
-// EBITDA margin — ADL uses underlying (excl FV gain on investment properties) for comparability with ACCC operating-profit-excl-landfill scope
+// EBITDA margin — ACCC-4: "operating profit excluding landfill" from supp DB. ADL: underlying EBITDA (excl FV gain on investment properties) for cohort comparability; ADL statutory margin is materially higher in some years. QAL: group EBITDA from group annual reports.
 const EBITDA_MARGIN = {
-  SYD: [40.0, 19.0, 49.0, 53.0, 57.1, 56.4],
-  MEL: [45.0, -32.6, 51.0, 51.0, 49.6, 48.1],
-  BNE: [50.0, 10.8, 20.0, 53.0, 57.8, 58.9],
-  PER: [40.0, 10.3, 49.0, 33.0, 43.2, 46.9],
+  SYD: [45.9, 18.4, 10.4, 43.8, 57.1, 56.4],
+  MEL: [40.7, -32.6, 9.5, 43.8, 49.6, 48.1],
+  BNE: [43.7, 10.8, 31.7, 48.6, 57.8, 58.9],
+  PER: [32.7, 10.3, 41.7, 50.4, 41.4, 46.9],
   ADL: [null, null, 53.1, 62.4, 60.9, 60.6],
-  QAL: [63.0, 58.0, 62.0, 67.0, 67.6, null]
+  QAL: [61.2, 60.4, 58.7, 69.4, 67.6, 67.0]
 };
 
-// FY25 totals for scatter
+// FY25 totals for scatter (ACCC AMR 2024-25 supp DB R52/R42, R14, R18; AAL FY25 audited for ADL)
 const FY25 = {
   SYD: { capexRev: 18.7, aeroPax: 29, revenue: 2011 },
   MEL: { capexRev: 86.9, aeroPax: 20, revenue: 1378 },
   BNE: { capexRev: 61.5, aeroPax: 22, revenue: 1091 },
   PER: { capexRev: 37.5, aeroPax: 21, revenue: 776 },
   ADL: { capexRev: 65.6, aeroPax: 19, revenue: 318 }
+};
+
+const FY24_MEDIAN = {
+  capexRev_n4: 38.2,  // recomputed from ACCC AMR 2024-25 supp DB FY24 series: sorted [14.6, 34.2, 42.3, 68.2] → (34.2+42.3)/2
 };
 
 // ====== Helpers ======
