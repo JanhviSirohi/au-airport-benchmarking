@@ -11,6 +11,7 @@ Accessed: 2026-04-27
 - QAL Group Annual Report 2025 — published Oct/Nov 2025
 - BITRE monthly file — Nov 2025 latest (no FY25 implication beyond annual file)
 - No new ACCC inquiry, Productivity Commission inquiry into airports, or Master Plans published since prior pass
+- QAL Annual Reports 2022, 2023, 2024, 2025 — full set retrieved; QAL 2022 AR p.7 contains 8-year P&L series FY15–FY22, extended to FY25 via subsequent reports (11-year series). Gold Coast project-level capex disclosed: A$500m precinct, A$260m terminal expansion (Sep 2022), A$17m ETROO (FY25), A$4m Vertical Transport, ~A$22m loan-funded project. **No full audited financial statements / cash-flow CAPEX / aero-non-aero split / Gold Coast standalone — these gaps remain across all 4 QAL annual reports and would require ASIC company filings.**
 
 ### ACCC AMR 2024-25 (published 5 March 2026)
 - https://www.accc.gov.au/about-us/publications/serial-publications/airport-monitoring-reports/airport-monitoring-report-2024-25 — Airport Monitoring Report 2024-25 page (published 5 March 2026) — accessed 2026-04-27
