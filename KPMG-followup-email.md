@@ -9,7 +9,7 @@ Dear [Name],
 
 Following delivery of the Australian airport investment and expenditure benchmarking report (FY20–FY25, 10 airports), I wanted to outline the enhancements that would materially strengthen the analysis in a follow-up engagement. I have grouped them by analytical leverage and indicated the data-acquisition or methodology effort required.
 
-The current report covers the four ACCC-monitored airports (Sydney, Melbourne, Brisbane, Perth), Adelaide (FY22–FY25 audited), the Queensland Airports Limited group (FY20–FY24, group-level), and program-total disclosures for Hobart, Canberra, Darwin and Cairns. The strongest series are the ACCC supplementary database for SYD/MEL/BNE/PER and the AAL audited cash-flow CAPEX line for ADL. Six methodological caveats (F3, F4, F5, F6, F8, F9 in the audit) limit the precision of cross-airport comparisons; a follow-up scope would address these directly.
+The current report covers the four ACCC-monitored airports (Sydney, Melbourne, Brisbane, Perth) FY20–FY25, Adelaide FY22–FY25 (audited), the Queensland Airports Limited group FY20–FY24 (group-level), and program-total disclosures for Hobart, Canberra, Darwin and Cairns. The strongest series are the ACCC AMR 2024-25 supplementary database for SYD/MEL/BNE/PER (published 5 March 2026) and the AAL audited cash-flow CAPEX line for ADL. Six methodological caveats (F3, F4, F5, F6, F8, F9 in the audit) limit the precision of cross-airport comparisons; a follow-up scope would address these directly.
 
 ## Tier 1 — High-leverage data acquisition
 
@@ -18,20 +18,20 @@ Hobart International Airport Pty Ltd, Capital Airport Group Pty Ltd, Northern Te
 - Estimated cost: A$1,200–1,500 in ASIC fees plus broker margin if using InfoTrack / CITEC Confirm
 - Effort: 1 week from extract receipt to integration into the per-FY framework
 
-**2. Adelaide Airport Limited FY20 and FY21 standalone Annual Financial Reports**
-A direct request to AAL Investor Relations (`ir@adelaideairport.com.au`) typically secures these. They would close the ADL series back to pre-COVID, enabling a clean 6-year build-cycle trajectory and proper FY20-baselined recovery analysis.
-- Estimated cost: nil (direct request)
+**2. Adelaide Airport Limited FY20 and FY21 standalone Annual Financial Reports + Queensland Airports Limited FY25 (when published)**
+A direct request to AAL Investor Relations (`ir@adelaideairport.com.au`) typically secures the ADL FY20/FY21 reports. These would close the ADL series back to pre-COVID, enabling a clean 6-year build-cycle trajectory and proper FY20-baselined recovery analysis. QAL's FY25 group annual report is expected October–November 2026; we can refresh QAL data when published.
+- Estimated cost: nil (direct request + monitoring)
 - Effort: 2–3 days post-receipt
 
-**3. International peer benchmarks — Auckland Airport, Singapore Changi, Auckland Airport's NZX-listed group**
-Auckland Airport (AIA.NZ) publishes audited annuals on a 30-June fiscal year, directly comparable to Australian airports. Changi Airport Group publishes annually with split aero/non-aero detail. This contextualises whether MEL's FY24 CAPEX/revenue of 68.2% is "globally high" or "AU build-cycle normal" — a question that cannot be answered within the AU-only cohort.
+**3. International peer benchmarks — Auckland Airport, Singapore Changi, Hong Kong Airport Authority**
+Auckland Airport (AIA.NZ) publishes audited annuals on a 30-June fiscal year, directly comparable to Australian airports. Changi Airport Group publishes annually with split aero/non-aero detail. This contextualises whether the FY25 cohort-wide CAPEX surge (cohort median 61.5%, MEL 86.9%) is globally exceptional or consistent with comparable post-pandemic airport investment cycles — a question that cannot be answered within the AU-only cohort.
 - Estimated cost: nil (public)
 - Effort: 1 week
 
 ## Tier 2 — Methodology refinement
 
 **4. Real-terms restatement using ABS CPI**
-ABS CPI cumulative growth FY20–FY25 was approximately 22%; ADL's "5.4× CAPEX ramp" includes ~12% nominal CPI. A real-terms restatement (FY20-base or FY24-base) would clarify whether multi-year capital intensity trajectories are real or nominal.
+ABS CPI cumulative growth FY20–FY25 was approximately 22%; ADL's "5.4× CAPEX ramp" includes ~12% nominal CPI. The FY25 cohort-wide CAPEX surge similarly conflates real investment with nominal inflation. A real-terms restatement (FY20-base or FY25-base) would clarify whether multi-year capital intensity trajectories are real or nominal.
 - Estimated cost: nil (ABS data)
 - Effort: 2–3 days
 

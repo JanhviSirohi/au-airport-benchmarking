@@ -99,7 +99,7 @@ A subset of federal ministerial press releases (`minister.infrastructure.gov.au`
 
 | Code | Source | Type |
 |---|---|---|
-| **S1** | ACCC Airport Monitoring Report 2023-24 supplementary database (XLSX) — sheets `SYD/MEL/BNE/PER total and aero` | Primary, audited regulatory accounts |
+| **S1** | ACCC Airport Monitoring Report 2024-25 supplementary database (XLSX, published 5 March 2026) — sheets `SYD/MEL/BNE/PER total and aero` — multi-year series FY07-08 to FY24-25 | Primary, audited regulatory accounts |
 | **S2** | BITRE annual airport activity FY1985-86 to FY2024-25 (XLSX) | Primary, government statistics |
 | **S3** | AAL Annual Financial Report 30 Jun 2024 (PDF, 58 pp) | Primary, audited (AASB Tier 2) |
 | **S4** | AAL Annual Financial Report 30 Jun 2025 (PDF, 57 pp) | Primary, audited (AASB Tier 2) |
@@ -128,36 +128,34 @@ A subset of federal ministerial press releases (`minister.infrastructure.gov.au`
 | **D5** | Cohort statistic (median, range, % of median) |
 | **D6** | Indicative / aspirational corporate disclosure (NOT audited) |
 
-### Per-figure trace — League Table FY24
+### Per-figure trace — League Table FY25 (latest — ACCC AMR 2024-25, published 5 March 2026)
 
 | Cell | Value | Source | Derivation | Notes |
 |---|---|---|---|---|
-| SYD CAPEX/pax FY24 | 7 | S1 | D2: 277.83 / 40.53 = 6.85 → 7 | CAPEX from ACCC supp DB; pax = ACCC scope incl ~16% int'l |
-| SYD OPEX/pax FY24 | 20 | S1 | D2: ~813 / 40.53 = 20.1 → 20 | OPEX = ACCC "total airport operating expenses" |
-| SYD aero rev/pax FY24 | 29 | S1 | D2 (also D1: A$29.36 published in supp DB) | Exactly matches derived |
-| SYD EBITDA margin FY24 | 57.1% | S1 | D2: 1,083.83 / 1,898 = 57.1% | EBITDA = ACCC "operating profit excl landfill"; not statutory (F14) |
-| SYD CAPEX/rev FY24 | 14.6% | S1 | D2: 277.83 / 1,898 = 14.6% | |
-| MEL CAPEX/pax FY24 | 23 | S1 | D2: 812.88 / 35.14 = 23.13 → 23 | |
-| MEL CAPEX/rev FY24 | 68.2% | S1 | D2: 812.88 / 1,192 = 68.2% | |
-| MEL EBITDA margin FY24 | 49.6% | S1 | D2 | |
-| BNE CAPEX/pax FY24 | 10 | S1 | D2: 237.92 / 24.08 = 9.88 → 10 | |
-| BNE OPEX/movement FY24 | 1,855 | S1 | D2: ~412.6 m / 222.5 k movements | ACCC ATM scope (incl military/GA), not BITRE RPT (F11) |
-| BNE EBITDA margin FY24 | 57.8% | S1 | D2: 566.42 / 979.14 = 57.85% | |
-| PER CAPEX/pax FY24 | 17 | S1 | D2: 281 / 16.14 = 17.4 → 17 | Pax = ACCC incl FIFO; BITRE RPT-only would give A$22 (F3) |
-| PER OPEX/pax FY24 | 23 | S1 | D2: 378 / 16.14 = 23.4 → 23 | Same denominator caveat |
-| PER EBITDA margin FY24 | 43.2% | S1 | D2 | |
-| ADL CAPEX/pax FY24 | 13 | S3 | D2: 106.829 / 8.25 = 12.95 → 13 | CAPEX from AAL FY24 cash flow statement p.17; pax from BITRE (F3) |
-| ADL CAPEX/rev FY24 | 37.5% | S3 | D2: 106.829 / 284.610 = 37.5% | |
-| ADL OPEX/pax FY24 | 13 | S3 | D2: 111.241 / 8.25 = 13.5 → 13 | OPEX = sum of 7 P&L expense lines (D3) |
-| ADL aero rev/pax FY24 | 17 | S3 | D2: 136.972 / 8.25 = 16.6 → 17 | |
-| ADL EBITDA margin FY24 | 60.9% | S3 | D2: 173.4 / 284.610 = 60.9% | EBITDA = underlying (excl A$41.6 m FV gain); statutory = 75.5% (F4) |
-| ADL CAPEX/pax FY25 | 24 | S4 | D2: 208.718 / ~8.6 | Audited CAPEX A$208.718 m verified; FY25 BITRE pax denominator pending |
+| SYD CAPEX/pax FY25 | 9 | S1 | D2: 375.28 / 41.77 = 8.98 → 9 | ACCC supp DB R52 ÷ R2 |
+| SYD OPEX/pax FY25 | 21 | S1 | D2: 877.26 / 41.77 = 21.0 | ACCC supp DB R20 ÷ R2 |
+| SYD aero rev/pax FY25 | 29 | S1 | D1 R14 (also D2: 1,229.38 / 41.77 = 29.43) | Direct from ACCC supp DB R14 |
+| SYD EBITDA margin FY25 | 56.4% | S1 | D2: 1,134.06 / 2,011.32 = 56.39% | EBITDA = ACCC "total airport operating profit excl landfill" R22 |
+| SYD CAPEX/rev FY25 | 18.7% | S1 | D2: 375.28 / 2,011.32 = 18.66% | |
+| MEL CAPEX/pax FY25 | 33 | S1 | D2: 1,197.81 / 36.17 = 33.12 → 33 | |
+| MEL CAPEX/rev FY25 | 86.9% | S1 | D2: 1,197.81 / 1,377.80 = 86.94% | Highest single-year reading FY20-FY25 |
+| MEL EBITDA margin FY25 | 48.1% | S1 | D2: 662.35 / 1,377.80 = 48.07% | |
+| BNE CAPEX/pax FY25 | 28 | S1 | D2: 670.77 / 24.36 = 27.54 → 28 | CAPEX +95.7% YoY |
+| BNE CAPEX/rev FY25 | 61.5% | S1 | D2: 670.77 / 1,091.50 = 61.45% | Build cycle entry |
+| BNE EBITDA margin FY25 | 58.9% | S1 | D2: 643.20 / 1,091.50 = 58.93% | |
+| PER CAPEX/pax FY25 | 17 | S1 | D2: 290.81 / 17.50 = 16.62 → 17 | Pax = ACCC incl FIFO (F3) |
+| PER OPEX/pax FY25 | 24 | S1 | D2: 412.12 / 17.50 = 23.55 → 24 | Same denominator caveat |
+| PER EBITDA margin FY25 | 46.9% | S1 | D2: 363.62 / 775.74 = 46.87% | |
+| ADL CAPEX/pax FY25 | 24 | S4 | D2: 208.718 / ~8.6 | Audited CAPEX A$208.718 m verified; FY25 BITRE pax pending |
 | ADL CAPEX/rev FY25 | 65.6% | S4 | D2: 208.718 / 318.206 = 65.59% | Both audited |
-| QAL OPEX/pax FY24 | 8 | S7 | D2: ~64 / 8.34 (group pax) | Group-vs-pax-denominator scope (F3, F4, F5) |
-| QAL EBITDA margin FY24 | 67.6% | S7 | D2 | Group-level (4 airports), includes property gains (F4) |
-| Median CAPEX/pax FY24 (n=4) | 13.5 | derived | D5 | ACCC-monitored cohort |
-| Median CAPEX/pax FY24 (n=5) | 11.5 | derived | D5 | Inclusive of ADL (F8) |
-| Median CAPEX/rev FY24 (n=4) | 33.3% | derived | D5 | ACCC-monitored cohort |
+| ADL OPEX/pax FY25 | 15 | S4 | D2: 125.494 / 8.6 = 14.59 → 15 | OPEX = D3 sum of 7 P&L expense lines |
+| ADL aero rev/pax FY25 | 19 | S4 | D2: 160.003 / 8.6 = 18.61 → 19 | |
+| ADL EBITDA margin FY25 | 60.6% | S4 | D2: 192.8 / 318.206 = 60.6% | Underlying EBITDA (excl A$67.6 m FV gain); statutory = 81.8% (F4) |
+| QAL OPEX/pax FY24 | 8 | S7 | D2: ~64 / 8.34 (group pax) | Group-vs-pax-denominator scope (F3, F4, F5); FY25 group results not yet published |
+| **Median CAPEX/pax FY25 (n=5)** | **24** | derived | D5 | Sorted [9, 17, 24, 28, 33] → median 24 |
+| **Median CAPEX/rev FY25 (n=5)** | **61.5%** | derived | D5 | Sorted [18.7, 37.5, 61.5, 65.6, 86.9] → median 61.5%; up from FY24 median 33.3% (+85% YoY) |
+| **Median OPEX/pax FY25 (n=5)** | **20** | derived | D5 | Sorted [15, 18, 20, 21, 24] → median 20 |
+| **Median EBITDA margin FY25 (n=5)** | **56.4%** | derived | D5 | Sorted [46.9, 48.1, 56.4, 58.9, 60.6] → median 56.4% |
 
 ### Per-figure trace — ADL P&L breakdown
 

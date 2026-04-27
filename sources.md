@@ -2,8 +2,16 @@
 Accessed: 2026-04-27
 
 ## ACCC Airport Monitoring Reports
+
+### Latest — AMR 2024-25 (published 5 March 2026)
+- https://www.accc.gov.au/about-us/publications/serial-publications/airport-monitoring-reports/airport-monitoring-report-2024-25 — Airport Monitoring Report 2024-25 page (published 5 March 2026) — accessed 2026-04-27
+- https://www.accc.gov.au/system/files/airport-monitoring-report-2024-25.pdf — AMR 2024-25 — full PDF (2.95 MB) — period FY24-25 — accessed 2026-04-27
+- https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2024-25-regulatory-accounts_0.xlsx — Regulatory Accounts XLSX FY24-25 — income statement, balance sheet, cash flow per airport (BNE/MEL/PER/SYD) — accessed 2026-04-27
+- https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2024-25-supplementary-database.xlsx — **Supplementary Database XLSX** — multi-year (FY07-08 to FY24-25, 18-year time series) financial + operational data for SYD/MEL/BNE/PER (sheets: `BNE total and aero`, `MEL total and aero`, `PER total and aero`, `SYD total and aero` plus car-park sheets) — accessed 2026-04-27 (1.18 MB) — **primary source for ACCC-4 financial figures throughout this report**
+
+### Index and prior years
 - https://www.accc.gov.au/about-us/publications/serial-publications/airport-monitoring-reports — ACCC Airport Monitoring Reports landing — series index — accessed 2026-04-27
-- https://www.accc.gov.au/about-us/publications/serial-publications/airport-monitoring-reports/airport-monitoring-report-2023-24 — Airport Monitoring Report 2023-24 page (published 17 March 2025) — accessed 2026-04-27
+- https://www.accc.gov.au/about-us/publications/serial-publications/airport-monitoring-reports/airport-monitoring-report-2023-24 — Airport Monitoring Report 2023-24 page (published 17 March 2025) — accessed 2026-04-27 (used for cross-checks; superseded by 2024-25 release)
 - https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2023-24.pdf — Airport Monitoring Report 2023-24 — full PDF (3.51 MB, 81 pp) — period FY23-24 — accessed 2026-04-27
 - https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2023-24-regulatory-accounts.xlsx — Regulatory Accounts XLSX — FY24 income statement, balance sheet, cash flow per airport (BNE/MEL/PER/SYD) — accessed 2026-04-27
 - https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2023-24-regulatory-accounts-revised-perth-data_0.xlsx — Revised Perth Airport regulatory accounts (issued Sept 2025) — accessed 2026-04-27
