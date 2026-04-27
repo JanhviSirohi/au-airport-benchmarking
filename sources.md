@@ -3,7 +3,16 @@ Accessed: 2026-04-27
 
 ## ACCC Airport Monitoring Reports
 
-### Latest — AMR 2024-25 (published 5 March 2026)
+### Latest source freshness check (refreshed 2026-04-27)
+- ACCC AMR 2024-25 — published 5 March 2026 (PRIMARY for SYD/MEL/BNE/PER FY25)
+- BITRE annual airport file — FY1985-86 to FY2024-25 (PRIMARY for cohort pax FY25)
+- AAL Annual Financial Report 30 Jun 2025 — published Oct/Nov 2025
+- AAL Integrated Report 2025 — published Oct/Nov 2025
+- QAL Group Annual Report 2025 — published Oct/Nov 2025
+- BITRE monthly file — Nov 2025 latest (no FY25 implication beyond annual file)
+- No new ACCC inquiry, Productivity Commission inquiry into airports, or Master Plans published since prior pass
+
+### ACCC AMR 2024-25 (published 5 March 2026)
 - https://www.accc.gov.au/about-us/publications/serial-publications/airport-monitoring-reports/airport-monitoring-report-2024-25 — Airport Monitoring Report 2024-25 page (published 5 March 2026) — accessed 2026-04-27
 - https://www.accc.gov.au/system/files/airport-monitoring-report-2024-25.pdf — AMR 2024-25 — full PDF (2.95 MB) — period FY24-25 — accessed 2026-04-27
 - https://www.accc.gov.au/system/files/accc-airport-monitoring-report-2024-25-regulatory-accounts_0.xlsx — Regulatory Accounts XLSX FY24-25 — income statement, balance sheet, cash flow per airport (BNE/MEL/PER/SYD) — accessed 2026-04-27
