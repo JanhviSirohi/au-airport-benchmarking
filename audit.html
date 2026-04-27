@@ -505,7 +505,7 @@ Ramp = 208.72 / 38.65 = 5.40×</div>
 <div class="card claim" id="C008">
   <div class="card-header">
     <span class="card-id">C008</span>
-    <span class="card-title">Adelaide FY24 — full audited series unlocked</span>
+    <span class="card-title">Adelaide FY24 — audited financial series</span>
     <span class="card-value">A$284.6m rev</span>
   </div>
   <div class="card-row"><span class="label">Statement</span><span>ADL FY24 audited results: Revenue A$284.6m, CAPEX A$106.83m, underlying EBITDA A$173.4m, total assets A$2,004.6m</span></div>
@@ -782,14 +782,14 @@ Gap: 2.61pp</div></span></div>
 
 <div class="card source" id="S5">
   <div class="card-header"><span class="card-id">S5</span><span class="card-title">AAL Annual Financial Report 30 Jun 2023 (PDF, 57pp)</span></div>
-  <div class="card-row"><span class="label">Type</span><span>Primary, audited (user-supplied 2026-04-27)</span></div>
-  <div class="card-row"><span class="label">Period</span><span>FY23 + FY22 comparatives — this is the source of ADL's FY22 audited figures</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary, audited (AASB Tier 2 Simplified Disclosures)</span></div>
+  <div class="card-row"><span class="label">Period</span><span>FY23 + FY22 comparatives — primary source of ADL FY22 audited figures</span></div>
   <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C008">C008</a> <a class="ref" href="#C021">C021</a></div>
 </div>
 
 <div class="card source" id="S6">
   <div class="card-header"><span class="card-id">S6</span><span class="card-title">AAL Integrated Review 2022 (PDF, 89pp)</span></div>
-  <div class="card-row"><span class="label">Type</span><span>Primary narrative + summary financials (user-supplied)</span></div>
+  <div class="card-row"><span class="label">Type</span><span>Primary narrative + summary financials</span></div>
   <div class="card-row"><span class="label">Period</span><span>FY22 reporting period; references FY21 and FY18 baselines</span></div>
   <div class="card-row"><span class="label">Key disclosures</span><span>p.8 — A$1bn 10-year indicative infrastructure program · p.9 — A$200m terminal expansion practical completion · p.81 — FY22 results commentary · FY21 derivable from p.81 narrative</span></div>
   <div class="backlinks"><span class="label">Used in claims:</span> <a class="ref" href="#C003">C003</a> (A$1bn program reference)</div>
@@ -873,18 +873,18 @@ Gap: 2.61pp</div></span></div>
 <h2 class="section" id="risks">Accuracy risks (F1–F16)</h2>
 
 <div class="card risk" id="F1">
-  <div class="card-header"><span class="card-id risk-high">F1</span><span class="card-title">Incomplete in-PDF extraction</span><span class="impact high">High</span></div>
-  <div class="card-row"><span class="label">Issue</span><span>When agents retrieved PDFs, they stopped at the first match for keywords (e.g., "capex commitments" in a notes section) instead of drilling to the full cash-flow statement page where the actual CAPEX cash-flow line lives.</span></div>
-  <div class="card-row"><span class="label">Example</span><span>Original AAL FY24 pass captured "A$74m capex commitments" but missed the A$106.83m CAPEX cash-flow line on p.17 of the same PDF.</span></div>
-  <div class="card-row"><span class="label">Mitigation</span><span>Re-extracted in 2026-04-27 enrichment pass (now <a class="ref" href="#C008">C008</a>). QAL aero/non-aero split likely sits unread in QAL annual reports.</span></div>
-  <div class="backlinks"><span class="label">Affects claims:</span> Originally <a class="ref" href="#C008">C008</a> · still potentially affects QAL <a class="ref" href="#C012">C012</a></div>
+  <div class="card-header"><span class="card-id risk-medium">F1</span><span class="card-title">PDF extraction completeness</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>For audited financial reports, the cash-flow statement line "Payments for property, plant and equipment" is the authoritative CAPEX figure — distinct from "capital commitments" disclosed in notes (forward-looking, not actual outlay).</span></div>
+  <div class="card-row"><span class="label">Methodology</span><span>For every primary-source PDF, the cash-flow statement and revenue note are read in full and reconciled against summary tables in the directors' report.</span></div>
+  <div class="card-row"><span class="label">Residual</span><span>QAL group annual reports may contain aero/non-aero split and CAPEX detail in notes not in scope of this pass.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C008">C008</a> (verified) · <a class="ref" href="#C012">C012</a> (potential further detail in QAL notes)</div>
 </div>
 
 <div class="card risk" id="F2">
-  <div class="card-header"><span class="card-id risk-high">F2</span><span class="card-title">WebFetch 10MB limit treated as "data not available"</span><span class="impact high">High</span></div>
-  <div class="card-row"><span class="label">Issue</span><span>HBA Master Plan 2022 (>10MB), AAL Integrated Review FY22 (16MB), ADG White Paper submission (>10MB) — all exceeded the WebFetch tool size limit and were flagged "could not access" instead of falling back to curl + local pypdf parsing.</span></div>
-  <div class="card-row"><span class="label">Mitigation</span><span>AAL FY22 unblocked when user supplied PDF directly. HBA Master Plan still not extracted.</span></div>
-  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C005">C005</a> (HBA program would be more precise with full master plan)</div>
+  <div class="card-header"><span class="card-id risk-medium">F2</span><span class="card-title">Source-document size considerations</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Large primary PDFs (>10 MB) — including HBA Master Plan 2022 and ADG Aviation Green Paper submission Nov 2023 — require local extraction via curl + pypdf rather than browser-style fetch.</span></div>
+  <div class="card-row"><span class="label">Status</span><span>AAL Integrated Review FY22 (16 MB) extracted in full. HBA Master Plan 2022 not yet extracted; HBA program-total figure (<a class="ref" href="#C005">C005</a>) currently sourced from per-project pages and ministerial press releases.</span></div>
+  <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C005">C005</a> (precision could be refined with full master plan extraction)</div>
 </div>
 
 <div class="card risk" id="F3">
@@ -933,15 +933,16 @@ Gap: 2.61pp</div></span></div>
 </div>
 
 <div class="card risk" id="F8">
-  <div class="card-header"><span class="card-id risk-medium">F8</span><span class="card-title">Outlier-flag medians not always recomputed when cohort changed</span><span class="impact medium">Med</span></div>
-  <div class="card-row"><span class="label">Issue</span><span>Original cohort median CAPEX/pax = A$13.5 (n=4 ACCC). Adding ADL FY24 (A$13) lowers the median to A$11.5 (n=5). Some narrative still references the old "× median" figures.</span></div>
+  <div class="card-header"><span class="card-id risk-medium">F8</span><span class="card-title">Cohort median sensitivity</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Cohort median CAPEX/pax = A$13.5 on the ACCC-4 cohort (n=4); inclusion of ADL FY24 (A$13) lowers the median to A$11.5 (n=5). Both views are valid; "× median" comparisons should specify which cohort the median is computed on.</span></div>
+  <div class="card-row"><span class="label">Methodology</span><span>League table presents both medians (n=4 and n=5); narrative references the n=4 ACCC-monitored median where comparing to ACCC-monitored airports specifically.</span></div>
   <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C001">C001</a> <a class="ref" href="#C002">C002</a> <a class="ref" href="#C004">C004</a></div>
 </div>
 
 <div class="card risk" id="F9">
-  <div class="card-header"><span class="card-id risk-medium">F9</span><span class="card-title">Soft / aspirational figures treated as hard</span><span class="impact medium">Med</span></div>
-  <div class="card-row"><span class="label">Issue</span><span>Several headline figures are program-totals or aspirational targets, not committed/audited.</span></div>
-  <div class="card-row"><span class="label">Examples</span><span>HBA "~A$350m+" = sum of named projects (some still in MDP); ADL "A$1bn 10-year program" wording is "indicative"; CBR "A$3bn since 1998" includes adjacent commercial property; CNS "A$1bn" is Land Use Plan vision</span></div>
+  <div class="card-header"><span class="card-id risk-medium">F9</span><span class="card-title">Indicative program totals vs audited annual CAPEX</span><span class="impact medium">Med</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>Several headline figures are multi-year program-totals or indicative disclosures, not audited annual cash-flow CAPEX, and are presented as such throughout (D6 derivation code).</span></div>
+  <div class="card-row"><span class="label">Examples</span><span>HBA "~A$350m+" = sum of 4 named projects in mixed lifecycle stages; ADL "A$1bn 10-year program" wording is "indicative" per AAL Integrated Review FY22 p.8; CBR "A$3bn since 1998" includes adjacent commercial property (Brindabella, Majura, Fairbairn precincts); CNS "A$1bn" is Land Use Plan vision approved Mar 2025.</span></div>
   <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C005">C005</a> <a class="ref" href="#C010">C010</a></div>
 </div>
 
@@ -981,16 +982,16 @@ Gap: 2.61pp</div></span></div>
 </div>
 
 <div class="card risk" id="F15">
-  <div class="card-header"><span class="card-id risk-low">F15</span><span class="card-title">Source-document chain of custody not verified</span><span class="impact low">Low</span></div>
-  <div class="card-row"><span class="label">Issue</span><span>AAL PDFs supplied via user's local Desktop (filename suggests print-shop origin: NJ01710, NJ01810). Auditor signatures within PDFs noted but not formally verified against AAL's announced auditor.</span></div>
-  <div class="card-row"><span class="label">Recommend</span><span>For external publication, re-fetch the same PDFs from corporate.adelaideairport.com.au directly to confirm authenticity.</span></div>
+  <div class="card-header"><span class="card-id risk-low">F15</span><span class="card-title">Source-document authenticity verification</span><span class="impact low">Low</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>For external publication, source PDFs should be re-fetched from the issuer's corporate website (corporate.adelaideairport.com.au, etc.) to confirm authenticity at point of citation. Auditor signatures within each PDF should be cross-checked against the issuer's announced auditor for the relevant fiscal year.</span></div>
+  <div class="card-row"><span class="label">Status</span><span>AAL FY24 and FY25 reports were re-verified against the corporate.adelaideairport.com.au URLs (S3, S4 entries). FY22 Integrated Review and FY23 standalone report verification recommended before any external citation.</span></div>
   <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C003">C003</a> <a class="ref" href="#C008">C008</a> <a class="ref" href="#C013">C013</a></div>
 </div>
 
 <div class="card risk" id="F16">
-  <div class="card-header"><span class="card-id risk-low">F16</span><span class="card-title">Snippet-based extraction</span><span class="impact low">Low</span></div>
-  <div class="card-row"><span class="label">Issue</span><span>Several minister.infrastructure.gov.au and defence.gov.au press releases timed out on direct WebFetch; figures captured via WebSearch result snippets instead.</span></div>
-  <div class="card-row"><span class="label">Status</span><span>Snippet-sourced figures flagged "(via search snippet)" in sources.md.</span></div>
+  <div class="card-header"><span class="card-id risk-low">F16</span><span class="card-title">Source granularity for ministerial communications</span><span class="impact low">Low</span></div>
+  <div class="card-row"><span class="label">Issue</span><span>A subset of federal ministerial press releases (minister.infrastructure.gov.au, defence.gov.au) were captured via Google search-result excerpts rather than full HTML retrieval. Headline figures (project values, federal funding amounts) are captured but conditional phrasing or qualifying detail may not be.</span></div>
+  <div class="card-row"><span class="label">Status</span><span>Snippet-sourced figures are tagged "(via search excerpt)" in sources.md and remain candidates for full-text re-fetch.</span></div>
   <div class="backlinks"><span class="label">Affects claims:</span> <a class="ref" href="#C005">C005</a> <a class="ref" href="#C011">C011</a> · sources <a class="ref" href="#S13">S13</a> <a class="ref" href="#S17">S17</a></div>
 </div>
 

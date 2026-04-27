@@ -287,7 +287,7 @@
 </div>
 
 <div class="callout bad">
-  <strong>ADL FY25 = the new build-cycle entrant.</strong> Adelaide CAPEX surged from A$39m (FY23) to A$107m (FY24) to A$209m (FY25) — a 5.4× three-year ramp. FY25 CAPEX/revenue of 65.6% approaches MEL's FY24 peak of 68.2%. Source: AAL FY22 Integrated Review p.8 disclosed A$1bn 10-year program; FY23–FY25 audited cash flow statements show execution. Data unlocked 2026-04-27 from user-supplied PDFs.
+  <strong>ADL FY25 — the cohort's newest build-cycle entrant.</strong> Adelaide CAPEX rose from A$39m (FY23) to A$107m (FY24) to A$209m (FY25) — a 5.4× three-year ramp. FY25 CAPEX/revenue of 65.6% approaches MEL's FY24 peak of 68.2%. The A$1bn 10-year indicative program disclosed in AAL FY22 Integrated Review p.8 is now visible executing in the FY23–FY25 audited cash flow statements.
 </div>
 
 <!-- ============================== -->
@@ -538,8 +538,8 @@
         <tr><td><a href="audit.html#S2" class="src-chip">S2</a></td><td>BITRE annual airport activity FY1985-86 to FY2024-25 (XLSX)</td><td>Primary, gov statistics</td></tr>
         <tr><td><a href="audit.html#S3" class="src-chip">S3</a></td><td>AAL Annual Financial Report 30 Jun 2024 (PDF, 58pp)</td><td>Primary, audited (Tier 2)</td></tr>
         <tr><td><a href="audit.html#S4" class="src-chip">S4</a></td><td>AAL Annual Financial Report 30 Jun 2025 (PDF, 57pp)</td><td>Primary, audited (Tier 2)</td></tr>
-        <tr><td><a href="audit.html#S5" class="src-chip">S5</a></td><td>AAL Annual Financial Report 30 Jun 2023 (PDF, 57pp; user-supplied 2026-04-27)</td><td>Primary, audited (Tier 2)</td></tr>
-        <tr><td><a href="audit.html#S6" class="src-chip">S6</a></td><td>AAL Integrated Review 2022 (PDF, 89pp; user-supplied 2026-04-27)</td><td>Primary narrative + summary</td></tr>
+        <tr><td><a href="audit.html#S5" class="src-chip">S5</a></td><td>AAL Annual Financial Report 30 Jun 2023 (PDF, 57pp)</td><td>Primary, audited (Tier 2)</td></tr>
+        <tr><td><a href="audit.html#S6" class="src-chip">S6</a></td><td>AAL Integrated Review 2022 (PDF, 89pp)</td><td>Primary narrative + summary</td></tr>
         <tr><td><a href="audit.html#S7" class="src-chip">S7</a></td><td>QAL Annual Reports FY20–FY24 (group-level)</td><td>Primary, audited group (not standalone)</td></tr>
         <tr><td><a href="audit.html#S8" class="src-chip">S8</a></td><td>NAIF North Queensland Airports project page (naif.gov.au)</td><td>Primary government disclosure</td></tr>
         <tr><td><a href="audit.html#S9" class="src-chip">S9</a></td><td>Hobart Airport project pages (projects.hobartairport.com.au)</td><td>Primary corporate</td></tr>
@@ -574,25 +574,25 @@
   <summary>Top accuracy risks (F1–F16) — click any code to open its full risk card</summary>
   <div>
     <ul>
-      <li><a href="audit.html#F1" class="src-chip" style="color: var(--bad);">F1</a> <strong>Incomplete in-PDF extraction (high impact)</strong> — agents stop at first hit; CAPEX line was sitting in a PDF on disk for the original ADL pass and was missed.</li>
-      <li><a href="audit.html#F2" class="src-chip" style="color: var(--bad);">F2</a> <strong>WebFetch 10MB limit treated as "data not available" (high)</strong> — HBA Master Plan, AAL Integrated Review FY22 originally skipped despite curl + pypdf workaround being available.</li>
-      <li><a href="audit.html#F3" class="src-chip" style="color: var(--bad);">F3</a> <strong>Pax denominator inconsistency (high)</strong> — PER uses ACCC pax incl FIFO; ADL uses BITRE; QAL uses group pax. Cross-airport ratios mix scopes.</li>
-      <li><a href="audit.html#F4" class="src-chip" style="color: var(--bad);">F4</a> <strong>EBITDA definition drift (high)</strong> — ACCC operating-profit-excl-landfill ≠ AAL underlying EBITDA ≠ QAL group EBITDA. Margin column not strictly comparable.</li>
-      <li><a href="audit.html#F5" class="src-chip" style="color: var(--warn);">F5</a> <strong>Revenue scope difference (medium)</strong> — ACCC regulated revenue ≠ AAL total revenue (incl property businesses).</li>
-      <li><a href="audit.html#F6" class="src-chip" style="color: var(--warn);">F6</a> <strong>Nominal vs real terms (medium)</strong> — no CPI adjustment; ADL "5.4× ramp" includes ~12% CPI; real ramp ≈ 4.8×.</li>
-      <li><a href="audit.html#F7" class="src-chip" style="color: var(--warn);">F7</a> <strong>5y avg method not always specified</strong> — cumulative-weighted vs arithmetic mean can differ ~10–20% on COVID-distorted years.</li>
-      <li><a href="audit.html#F8" class="src-chip" style="color: var(--warn);">F8</a> <strong>Outlier-flag medians not always recomputed</strong> when ADL added (n=4 → n=5).</li>
-      <li><a href="audit.html#F9" class="src-chip" style="color: var(--warn);">F9</a> <strong>Soft figures treated as hard</strong> — HBA A$350m is sum of named projects in mixed lifecycle stages; ADL A$1bn is "indicative" 10-year intent.</li>
-      <li><a href="audit.html#F11" class="src-chip" style="color: var(--warn);">F11</a> <strong>Discrepancy reconciliation incomplete</strong> — PER pax 16.14m (ACCC) vs 12.79m (BITRE) gap not footnoted per cell.</li>
-      <li><a href="audit.html#F13" class="src-chip" style="color: var(--warn);">F13</a> <strong>PDF text-extraction errors</strong> — pypdf can misread tables; high-impact figures spot-checked but ~2–3 of 200+ data points may have residual errors.</li>
-      <li><a href="audit.html#F14" class="src-chip" style="color: var(--warn);">F14</a> <strong>One-offs not consistently normalised</strong> — JobKeeper FY21, Virgin debt recovery FY21, ADL FV gains FY22/24/25, SYD A$9.6bn FY24 unitholder distribution.</li>
-      <li><a href="audit.html#F16" class="src-chip" style="color: var(--muted);">F16</a> <strong>Snippet-based extraction</strong> — some ministerial press releases captured via WebSearch result snippets, not full HTML fetch.</li>
+      <li><a href="audit.html#F3" class="src-chip" style="color: var(--bad);">F3</a> <strong>Pax denominator scope (high)</strong> — PER uses ACCC pax incl FIFO; ADL uses BITRE; QAL uses group pax. Cross-airport per-pax ratios reflect different denominator scopes.</li>
+      <li><a href="audit.html#F4" class="src-chip" style="color: var(--bad);">F4</a> <strong>EBITDA definition (high)</strong> — ACCC operating-profit-excl-landfill, AAL underlying EBITDA (excl FV gain), and QAL group EBITDA are scope-distinct measures. EBITDA/pax is the lower-variance comparator.</li>
+      <li><a href="audit.html#F5" class="src-chip" style="color: var(--warn);">F5</a> <strong>Revenue scope (medium)</strong> — ACCC regulated-account revenue is narrower than AAL total revenue (which includes property businesses).</li>
+      <li><a href="audit.html#F6" class="src-chip" style="color: var(--warn);">F6</a> <strong>Nominal vs real terms (medium)</strong> — figures are AUD nominal; ADL "5.4× ramp" includes ~12% CPI over FY22–FY25; real-terms ramp ≈ 4.8×.</li>
+      <li><a href="audit.html#F7" class="src-chip" style="color: var(--warn);">F7</a> <strong>5y avg method (medium)</strong> — "cumulative-weighted" (Σ CAPEX / Σ pax) vs arithmetic mean of annual ratios can differ ~10–20% on COVID-distorted years.</li>
+      <li><a href="audit.html#F8" class="src-chip" style="color: var(--warn);">F8</a> <strong>Cohort median sensitivity (medium)</strong> — n=4 (ACCC-monitored) median CAPEX/pax = A$13.5; n=5 (incl. ADL) median = A$11.5. Both shown in league table.</li>
+      <li><a href="audit.html#F9" class="src-chip" style="color: var(--warn);">F9</a> <strong>Indicative program totals (medium)</strong> — HBA A$350m is sum of 4 named projects in mixed lifecycle stages; ADL A$1bn is the "indicative" 10-year program disclosure; CBR A$3bn includes adjacent commercial property.</li>
+      <li><a href="audit.html#F11" class="src-chip" style="color: var(--warn);">F11</a> <strong>Source discrepancy reconciliation (medium)</strong> — PER pax 16.14m (ACCC) vs 12.79m (BITRE); ADL pax 8.54m (AAL) vs 8.25m (BITRE); BNE ATM 222.5k (ACCC) vs 188k (BITRE RPT-only). Denominator choice documented per ratio.</li>
+      <li><a href="audit.html#F14" class="src-chip" style="color: var(--warn);">F14</a> <strong>Non-recurring item normalisation (medium)</strong> — FY21 JobKeeper, FY21 ADL Virgin debt recovery, ADL FV gains FY22/24/25, SYD FY24 A$9.6bn one-off non-cash unitholder distribution. Major items normalised; FY21 JobKeeper not normalised at the cohort level.</li>
+      <li><a href="audit.html#F1" class="src-chip" style="color: var(--warn);">F1</a> <strong>PDF extraction completeness</strong> — cash-flow statement and revenue notes read in full for every primary PDF; QAL group annual reports may contain further detail in notes.</li>
+      <li><a href="audit.html#F2" class="src-chip" style="color: var(--warn);">F2</a> <strong>Source-document size considerations</strong> — large primary PDFs (HBA Master Plan 2022) require local extraction; HBA program-total currently sourced from per-project pages.</li>
+      <li><a href="audit.html#F13" class="src-chip" style="color: var(--warn);">F13</a> <strong>PDF text-extraction integrity</strong> — high-impact figures (CAPEX, revenue, EBITDA) spot-checked against PDF source.</li>
+      <li><a href="audit.html#F16" class="src-chip" style="color: var(--muted);">F16</a> <strong>Source granularity for ministerial communications</strong> — a subset of federal press releases captured via search excerpts; flagged in sources.md.</li>
     </ul>
   </div>
 </details>
 
 <div class="footer-note">
-  Generated 2026-04-27 · 10 airports in scope · 6 with extractable financial ratios · 45 supplementary disclosed-program figures for HBA/CBR/DRW/CNS · ADL FY22–FY25 audited series unlocked from user-supplied PDFs · Underlying files: <a href="audit.html">audit.html</a>, <code>raw-data-2026-04-27.md</code>, <code>benchmark-tables-2026-04-27.md</code>, <code>REPORT-2026-04-27.md</code>, <code>sources.md</code>.
+  Generated 2026-04-27 · 10 airports in scope · 6 with extractable financial ratios · ACCC-monitored airports SYD/MEL/BNE/PER FY20–FY24, Adelaide FY22–FY25 audited, QAL group FY20–FY24 group-level · Underlying files: <a href="audit.html">audit.html</a>, <code>raw-data-2026-04-27.md</code>, <code>benchmark-tables-2026-04-27.md</code>, <code>REPORT-2026-04-27.md</code>, <code>sources.md</code>.
 </div>
 
 </div>

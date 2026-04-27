@@ -108,7 +108,7 @@ Accessed: 2026-04-27
 
 ---
 
-# Additional sources (2026-04-27 enrichment pass)
+# Additional sources — unregulated airports & supplementary disclosures
 
 ### Hobart (HBA) — additional sources
 
